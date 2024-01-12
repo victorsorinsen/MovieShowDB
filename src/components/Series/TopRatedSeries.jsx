@@ -58,7 +58,7 @@ function TopRatedSeries() {
             id: result.id,
             backdrop_path:
               'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
-            first_air_date: result.first_air_date,
+            first_air_date: result.first_air_date || 'Upcoming',
             genres: result.genre_ids,
             overview: result.overview,
             popularity: result.popularity,

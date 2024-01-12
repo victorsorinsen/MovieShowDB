@@ -296,7 +296,7 @@ const Watchlist = () => {
                         </div>
                       </div>
                       <div className="watchlistAirDate">
-                        <p>{movie.release_date}</p>
+                        <p>{movie.release_date || 'Unreleased'}</p>
                       </div>
                       <div className="movieWatchlistGenres">
                         {movie.genres && movie.genres.length > 0
@@ -334,7 +334,7 @@ const Watchlist = () => {
                           : null}
                       </div>
                       <div className="movieWatchlistOverview">
-                        <p>{movie.overview}</p>
+                        <p>{movie.overview || 'The plot is unknown.'}</p>
                       </div>
                     </div>
                   </div>
@@ -398,7 +398,7 @@ const Watchlist = () => {
                         </div>
                       </div>
                       <div className="watchlistAirDate">
-                        <p>{show.first_air_date}</p>
+                        <p>{show.first_air_date || 'Unreleased'}</p>
                       </div>
                       <div className="movieWatchlistGenres">
                         {show.genres && show.genres.length > 0
@@ -436,7 +436,7 @@ const Watchlist = () => {
                           : null}
                       </div>
                       <div className="movieWatchlistOverview">
-                        <p>{show.overview}</p>
+                        <p>{show.overview || 'The plot is unknow.'}</p>
                       </div>
                     </div>
                   </div>

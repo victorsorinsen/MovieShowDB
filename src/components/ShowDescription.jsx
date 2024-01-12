@@ -57,7 +57,7 @@ const ShowDescription = () => {
             id: result.id,
             backdrop_path:
               'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
-            first_air_date: result.first_air_date,
+            first_air_date: result.first_air_date || 'Unreleased',
             genres: result.genre_ids,
             overview: result.overview,
             popularity: result.popularity,
@@ -230,7 +230,7 @@ const ShowDescription = () => {
               {/* <GoDotFill className="movieDots" />
               <div className="movieRuntime">{episode_run_time} min</div> */}
               <GoDotFill className="movieDots" />
-              <div className="movieYear">{last_air_date}</div>
+              <div className="movieYear">{last_air_date || 'Unreleased'}</div>
               <GoDotFill className="movieDots" />
               <div className="trailerDiv">
                 <button className="trailer" onClick={() => setShow(true)}>
@@ -308,7 +308,11 @@ const ShowDescription = () => {
             </div>
             <div className="movieOverview">
               <h6>Overview</h6>
-              <p>{overview}</p>
+              <p>
+                {overview !== undefined && overview !== null && overview !== ''
+                  ? overview
+                  : 'The plot is unknown.'}
+              </p>
             </div>
             {/* overview   */}
             <div className="movieCast">

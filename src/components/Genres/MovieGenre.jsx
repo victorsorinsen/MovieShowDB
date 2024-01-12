@@ -39,7 +39,7 @@ const MovieGenre = () => {
             id: result.id,
             backdrop_path:
               'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
-            release_date: result.release_date,
+            release_date: result.release_date || 'Upcoming',
             genres: result.genre_ids,
             overview: result.overview,
             popularity: result.popularity,

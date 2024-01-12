@@ -6,21 +6,22 @@ import Modal from 'react-bootstrap/Modal';
 import { useState, useEffect } from 'react';
 import { CiPlay1 } from 'react-icons/ci';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
-import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 // import Background from './background';
 import { useParams } from 'react-router-dom';
+import { Tabs, Tab } from 'react-bootstrap';
 
 const PersonDescription = () => {
   const { id } = useParams();
   const [personDetails, setPersonDetails] = useState([]);
-  const [cardItems, setCardItems] = useState([]);
+  const [personCreditsCast, setPersonCreditsCast] = useState([]);
+  const [personCreditsCrew, setPersonCreditsCrew] = useState([]);
 
   useEffect(() => {
     const fetchPersonDetails = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/person/${id}?api_key=6a77f5a2cdf1a150f808f73c35533a92&append_to_response=credits&language=en-US`
+          `https://api.themoviedb.org/3/person/${id}?api_key=6a77f5a2cdf1a150f808f73c35533a92&append_to_response=combined_credits&language=en-US`
         );
         const data = await response.json();
 
@@ -30,28 +31,50 @@ const PersonDescription = () => {
       }
     };
 
-    const getDataFromServer = async () => {
+    const getPersonCredits = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${id}/similar?api_key=6a77f5a2cdf1a150f808f73c35533a92`
+          `https://api.themoviedb.org/3/person/64295/combined_credits?language=en-US&api_key=6a77f5a2cdf1a150f808f73c35533a92`
         );
         const data = await response.json();
-        const items = data.results.map((result, index) => {
+        const crew = data.crew.map((crew, index) => {
           return {
-            movieTitle: result.title,
+            movieTitle: crew.title,
             moviePoster:
-              'https://www.themoviedb.org/t/p/original' + result.poster_path,
-            movieRating: parseFloat(result.vote_average.toFixed(1)),
-            movieId: result.id,
+              'https://www.themoviedb.org/t/p/original' + crew.poster_path,
+
+            movieId: crew.id,
+            movieName: crew.name,
+            movieRole: crew.job,
+            mediaType: crew.media_type,
+            movieDate: crew.release_date,
+            movieAirDate: crew.first_air_date,
+            vote_average: parseFloat(crew.vote_average.toFixed(1)),
           };
         });
-        setCardItems(items);
+        const cast = data.cast.map((cast, index) => {
+          return {
+            movieTitle: cast.title,
+            moviePoster:
+              'https://www.themoviedb.org/t/p/original' + cast.poster_path,
+
+            movieId: cast.id,
+            movieName: cast.name,
+            movieRole: cast.job,
+            mediaType: cast.media_type,
+            movieDate: cast.release_date || cast.first_air_date || 'Upcoming',
+            movieChar: cast.character,
+            vote_average: parseFloat(cast.vote_average.toFixed(1)),
+          };
+        });
+        setPersonCreditsCast(cast);
+        setPersonCreditsCrew(crew);
       } catch (error) {
         console.error('Error fetching movie details:', error);
       }
     };
 
-    getDataFromServer();
+    getPersonCredits();
     fetchPersonDetails();
   }, [id]);
 
@@ -65,10 +88,10 @@ const PersonDescription = () => {
     name,
     profile_path,
     place_of_birth,
-    credits,
+    combined_credits,
   } = personDetails;
 
-  console.log(credits);
+  console.log(combined_credits);
 
   const getGenderLabel = (gender) => {
     switch (gender) {
@@ -87,39 +110,17 @@ const PersonDescription = () => {
 
   const genderLabel = getGenderLabel(gender);
 
-  const knownFor = {};
+  console.log(personCreditsCast);
+  console.log(personCreditsCrew);
 
-  const [show, setShow] = useState(false);
-
-  const slideLeftMostPopular = () => {
-    const slider = document.getElementById('sliderMostPopular');
-    const card = document.querySelector('.card');
-    const computedStyle = window.getComputedStyle(card);
-    const cardWidth = card.offsetWidth + parseFloat(computedStyle.marginRight);
-    slider.scrollLeft -= cardWidth;
-  };
-
-  const slideRightMostPopular = () => {
-    const slider = document.getElementById('sliderMostPopular');
-    const card = document.querySelector('.card');
-    const computedStyle = window.getComputedStyle(card);
-    const cardWidth = card.offsetWidth + parseFloat(computedStyle.marginRight);
-    slider.scrollLeft += cardWidth;
-  };
+  const sortedCast = personCreditsCast.slice().sort((a, b) => {
+    return b.movieDate.localeCompare(a.movieDate);
+  });
 
   return (
     <>
       {/* <Background /> */}
-      {/* {movieDetails.map((item, index) => ( */}
       <div className={`persondescriptionPage`}>
-        {/* {backdrop_path && (
-          <div
-            className="backdropImage"
-            style={{
-              backgroundImage: `url(https://www.themoviedb.org/t/p/original${backdrop_path})`,
-            }}
-          ></div>
-        )} */}
         <div className="persongeneralDescription">
           <div className="persondivImage">
             <img
@@ -184,64 +185,58 @@ const PersonDescription = () => {
           </div>
         </div>
       </div>
-      {/* ))} */}
-      <div className="sliderTitle">
-        <h2>Recommended for you</h2>
-      </div>
-      <div className="main-slider-container">
-        <MdChevronLeft
-          size={40}
-          className="slider-icon left"
-          onClick={slideLeftMostPopular}
-        />
-
-        {/* <div className="cardz" id="sliderMostPopular">
-          {cardItems.map((item, index) => (
-            <Card key={index}>
-              <div className="imageDiv">
-                <Link to={`/movies/${item.movieId}`}>
-                  <Card.Img variant="top" src={item.moviePoster} />
-                </Link>
-              </div>
-              <Card.Body>
-                <Card.Title>
-                  <Link
-                    className="cardMovieTitle"
-                    to={`/movies/${item.movieId}`}
-                  >
-                    <b>{item.movieTitle}</b>
-                  </Link>
-                </Card.Title>
-                <Card.Text>
-                  <div className="cardDetails">
-                    <div className="rating">
-                      <FaStar className="starrating" size={25} />
-                      <span>
-                        <b>{item.movieRating}</b>
-                      </span>
-                    </div>
-                    <div className="addWatchlist">
-                      <Button
-                        className="addWatchlistButton"
-                        variant="primary"
-                        title="Add to Watchlist"
-                      >
-                        +
-                      </Button>
-                    </div>
+      {/* ))} */}.
+      <Tabs
+        defaultActiveKey="Actor"
+        id="uncontrolled-tab-example"
+        className="mb-3"
+      >
+        <Tab eventKey="Actor" title="Actor">
+          {sortedCast.length > 0 && (
+            <div className="creditsTabDiv">
+              {sortedCast.map((item, index) => (
+                <div className="creditItemDiv" key={index}>
+                  <div className="creditImage">
+                    {item.moviePoster.endsWith(null) ? (
+                      <img
+                        src="/src/assets/No-Image-Placeholder.png"
+                        alt=""
+                        className="searchImage"
+                      />
+                    ) : (
+                      <img
+                        src={item.moviePoster}
+                        alt=""
+                        className="searchImage"
+                      />
+                    )}
                   </div>
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          ))}
-        </div>
-
-        <MdChevronRight
-          size={40}
-          className="slider-icon right"
-          onClick={slideRightMostPopular}
-        /> */}
-      </div>
+                  <div className="creditDetailsDiv">
+                    <div className="titleDate">
+                      <p>
+                        {item.mediaType === 'movie' ? (
+                          <b>{item.movieTitle}</b>
+                        ) : (
+                          <b>{item.movieName}</b>
+                        )}
+                      </p>
+                    </div>
+                    <p className="smallerText" key={index}>
+                      <FaStar className="starrating" size={20} />
+                      {item.vote_average}
+                    </p>
+                    <div>"{item.movieChar}"</div>
+                  </div>
+                  <div className="dateDisplay">{item.movieDate}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </Tab>
+        <Tab eventKey="Producer" title="Producer"></Tab>
+        <Tab eventKey="Director" title="Director"></Tab>
+        <Tab eventKey="Writer" title="Writer"></Tab>
+      </Tabs>
     </>
   );
 };
