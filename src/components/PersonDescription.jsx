@@ -34,7 +34,7 @@ const PersonDescription = () => {
     const getPersonCredits = async () => {
       try {
         const response = await fetch(
-          `https://api.themoviedb.org/3/person/64295/combined_credits?language=en-US&api_key=6a77f5a2cdf1a150f808f73c35533a92`
+          `https://api.themoviedb.org/3/person/${id}/combined_credits?language=en-US&api_key=6a77f5a2cdf1a150f808f73c35533a92`
         );
         const data = await response.json();
         const crew = data.crew.map((crew, index) => {
@@ -117,6 +117,27 @@ const PersonDescription = () => {
     return b.movieDate.localeCompare(a.movieDate);
   });
 
+  const sortedCrew = personCreditsCrew.slice().sort((a, b) => {
+    const dateA = a.movieDate ? new Date(a.movieDate) : new Date();
+    const dateB = b.movieDate ? new Date(b.movieDate) : new Date();
+    return dateB - dateA;
+  });
+
+  const crewTabs = [
+    ...new Set(personCreditsCrew.map((item) => item.movieRole)),
+  ];
+  console.log(crewTabs);
+
+  const crewTabsData = {};
+  sortedCrew.forEach((item) => {
+    if (!crewTabsData[item.movieRole]) {
+      crewTabsData[item.movieRole] = [];
+    }
+    crewTabsData[item.movieRole].push(item);
+  });
+
+  console.log(crewTabsData);
+
   return (
     <>
       {/* <Background /> */}
@@ -141,9 +162,9 @@ const PersonDescription = () => {
             <div className="personmovieCast">
               <GoDotFill className="personmovieDots" />
               <div className="personmovieYear">
-                Famous For: {known_for_department}
+                Known For: {known_for_department}
               </div>
-              <GoDotFill className="personmovieDots" />
+              {/* <GoDotFill className="personmovieDots" />
               <p>
                 <b>
                   Also Known As:{' '}
@@ -151,7 +172,7 @@ const PersonDescription = () => {
                     ? also_known_as.join(', ')
                     : 'N/A'}
                 </b>
-              </p>
+              </p> */}
             </div>
 
             <div className="personmovieRatingYearRuntime">
@@ -213,13 +234,15 @@ const PersonDescription = () => {
                   </div>
                   <div className="creditDetailsDiv">
                     <div className="titleDate">
-                      <p>
-                        {item.mediaType === 'movie' ? (
+                      {item.mediaType === 'movie' ? (
+                        <Link to={`/movies/${item.movieId}`}>
                           <b>{item.movieTitle}</b>
-                        ) : (
+                        </Link>
+                      ) : (
+                        <Link to={`/tv/${item.movieId}`}>
                           <b>{item.movieName}</b>
-                        )}
-                      </p>
+                        </Link>
+                      )}
                     </div>
                     <p className="smallerText" key={index}>
                       <FaStar className="starrating" size={20} />
@@ -233,9 +256,56 @@ const PersonDescription = () => {
             </div>
           )}
         </Tab>
-        <Tab eventKey="Producer" title="Producer"></Tab>
-        <Tab eventKey="Director" title="Director"></Tab>
-        <Tab eventKey="Writer" title="Writer"></Tab>
+        {crewTabs.map((tabItem, tabIndex) => (
+          <Tab eventKey={tabItem} title={tabItem} key={tabItem + tabIndex}>
+            {sortedCrew.length > 0 && (
+              <div className="creditsTabDiv">
+                {sortedCrew
+                  .filter((item) => item.movieRole === tabItem)
+                  .map((item, index) => (
+                    <div className="creditItemDiv" key={index}>
+                      <div className="creditImage">
+                        {item.moviePoster.endsWith(null) ? (
+                          <img
+                            src="/src/assets/No-Image-Placeholder.png"
+                            alt=""
+                            className="searchImage"
+                          />
+                        ) : (
+                          <img
+                            src={item.moviePoster}
+                            alt=""
+                            className="searchImage"
+                          />
+                        )}
+                      </div>
+                      <div className="creditDetailsDiv">
+                        <div className="titleDate">
+                          {item.mediaType === 'movie' ? (
+                            <Link to={`/movies/${item.movieId}`}>
+                              <b>{item.movieTitle}</b>
+                            </Link>
+                          ) : (
+                            <Link to={`/tv/${item.movieId}`}>
+                              <b>{item.movieName}</b>
+                            </Link>
+                          )}
+                        </div>
+                        <p className="smallerText" key={index}>
+                          <FaStar className="starrating" size={20} />
+                          {item.vote_average}
+                        </p>
+                        <div>"{item.movieRole}"</div>
+                      </div>
+                      <div className="dateDisplay">
+                        {item.movieDate || 'Upcoming'}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </Tab>
+        ))}
       </Tabs>
     </>
   );

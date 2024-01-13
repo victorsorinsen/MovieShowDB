@@ -319,22 +319,37 @@ const ShowDescription = () => {
               <p>
                 Cast:{' '}
                 {credits && credits.cast && credits.cast.length > 0
-                  ? credits.cast
-                      .slice(0, 8)
-                      .map((actor) => actor.name)
-                      .join(', ')
+                  ? credits.cast.slice(0, 8).map((actor, index) => (
+                      <React.Fragment key={index}>
+                        <Link to={`/person/${actor.id}`}>{actor.name}</Link>
+                        {index < 7 && ', '}{' '}
+                      </React.Fragment>
+                    ))
                   : 'N/A'}
               </p>
             </div>
             <div className="movieDirector">
               <p>
                 Created By:{' '}
-                {created_by && created_by && created_by.length > 0
-                  ? created_by
-                      .slice(0, 8)
-                      .map((person) => person.name)
-                      .join(', ')
-                  : 'N/A'}
+                {credits && credits.crew && credits.crew.length > 0 ? (
+                  credits.crew.find((member) => member.job === 'Director') ? (
+                    <Link
+                      to={`/person/${
+                        credits.crew.find((member) => member.job === 'Director')
+                          .id
+                      }`}
+                    >
+                      {
+                        credits.crew.find((member) => member.job === 'Director')
+                          .name
+                      }
+                    </Link>
+                  ) : (
+                    'N/A'
+                  )
+                ) : (
+                  'N/A'
+                )}
               </p>
             </div>
           </div>

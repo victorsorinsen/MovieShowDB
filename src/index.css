@@ -9,7 +9,7 @@
 }
 
 body {
-  background-color: var(--color-four);
+  background-color: var(--color-six);
   color: var(--color-one);
   min-height: 100vh;
   position: relative;
@@ -310,6 +310,10 @@ input.form-control:focus {
   border-radius: 0.5rem;
   border: 1px solid var(--color-seven);
   transition: all 0.5s ease;
+}
+
+.searchResultsDrop a {
+  text-decoration: none;
 }
 
 .searchItemDiv {
@@ -661,6 +665,10 @@ input.form-control:focus {
   margin-left: 15px;
 }
 
+.divDescription h1 {
+  font-weight: bold;
+}
+
 .generalDescription {
   display: flex;
 }
@@ -691,22 +699,44 @@ input.form-control:focus {
 }
 
 .movieOverview {
+  font-weight: bold;
   margin-top: 20px;
   font-size: larger;
 }
 
 .movieOverview h6 {
   font-size: larger;
+  font-weight: bold;
 }
 
 .movieCast {
+  font-weight: bold;
   margin-top: 20px;
   font-size: large;
 }
 
+.movieCast a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.movieCast a:hover {
+  color: var(--color-one);
+}
+
 .movieDirector {
+  font-weight: bold;
   margin-top: 20px;
   font-size: large;
+}
+
+.movieDirector a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.movieDirector a:hover {
+  color: var(--color-one);
 }
 
 .movieGenres {
@@ -950,6 +980,7 @@ input.form-control:focus {
 .backgroundbody {
   margin: 0;
   overflow: hidden;
+  background-color: var(--color-four);
 }
 
 /* ACCOUNT PAGE */
@@ -1519,6 +1550,11 @@ p {
   align-items: center;
   color: var(--color-seven);
   transition: all 0.5s ease;
+}
+
+.creditItemDiv a {
+  color: var(--color-seven);
+  text-decoration: none;
 }
 
 .creditImage {

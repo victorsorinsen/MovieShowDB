@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { BiSolidMoviePlay } from 'react-icons/bi';
 import Menu from './Menu';
 import Form from 'react-bootstrap/Form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { movieGenreArray } from './exportFunctions';
@@ -76,6 +76,19 @@ const Navbar = () => {
     };
 
     getSearchResults();
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setCardItems([]);
+      }
+    });
+
+    return () => {
+      window.removeEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          setCardItems([]);
+        }
+      });
+    };
   }, [keyword]);
 
   const handleInputClick = () => {
@@ -84,6 +97,19 @@ const Navbar = () => {
       inputElement.select();
     }
   };
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setKeyword('');
+      setCardItems([]);
+    };
+
+    window.addEventListener('popstate', handleRouteChange);
+
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
+  }, []);
 
   return (
     <div className="navbar">
@@ -108,49 +134,58 @@ const Navbar = () => {
         {cardItems.length > 0 && (
           <div className="searchResultsDrop">
             {cardItems.map((item, index) => (
-              <div className="searchItemDiv" key={index}>
-                <div>
-                  {item.poster_path.endsWith(null) ? (
-                    <img
-                      src="/src/assets/No-Image-Placeholder.png"
-                      alt=""
-                      className="searchImage"
-                    />
-                  ) : (
-                    <img
-                      src={item.poster_path}
-                      alt=""
-                      className="searchImage"
-                    />
-                  )}
-                </div>
-                <div className="searchDetailsDiv">
-                  <p>
-                    {item.mediaType === 'movie' ? (
-                      <b>{item.title}</b>
+              <Link
+                to={
+                  item.mediaType === 'movie'
+                    ? `/movies/${item.id}`
+                    : `/tv/${item.id}`
+                }
+              >
+                <div className="searchItemDiv" key={index}>
+                  <div>
+                    {item.poster_path.endsWith(null) ? (
+                      <img
+                        src="/src/assets/No-Image-Placeholder.png"
+                        alt=""
+                        className="searchImage"
+                      />
                     ) : (
-                      <b>{item.name}</b>
+                      <img
+                        src={item.poster_path}
+                        alt=""
+                        className="searchImage"
+                      />
                     )}
-                  </p>
-                  {item.mediaType === 'movie' ? (
-                    <p className="smallerText">{item.release_date}</p>
-                  ) : (
-                    <p className="smallerText">{item.first_air_date}</p>
-                  )}
+                  </div>
+                  <div className="searchDetailsDiv">
+                    <p>
+                      {item.mediaType === 'movie' ? (
+                        <b>{item.title}</b>
+                      ) : (
+                        <b>{item.name}</b>
+                      )}
+                    </p>
+                    {item.mediaType === 'movie' ? (
+                      <p className="smallerText">{item.release_date}</p>
+                    ) : (
+                      <p className="smallerText">{item.first_air_date}</p>
+                    )}
 
-                  <p className="smallerText" key={index}>
-                    <FaStar className="starrating" size={20} />
-                    {item.vote_average !== undefined
-                      ? parseFloat(item.vote_average.toFixed(1))
-                      : 'N/A'}
-                  </p>
+                    <p className="smallerText" key={index}>
+                      <FaStar className="starrating" size={20} />
+                      {item.vote_average !== undefined
+                        ? parseFloat(item.vote_average.toFixed(1))
+                        : 'N/A'}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
-
-            <div className="searchResultsAll">
-              See all results for "{keyword}"
-            </div>
+            <Link to={`/SearchResults/${dropDownTitle}/${keyword}`}>
+              <div className="searchResultsAll">
+                See all results for "{keyword}"
+              </div>
+            </Link>
           </div>
         )}
         <DropdownButton
