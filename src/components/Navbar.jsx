@@ -103,7 +103,10 @@ const Navbar = () => {
   useEffect(() => {
     const handleURLChange = () => {
       console.log('Current URL:', location.pathname);
-
+      const inputElement = document.getElementById('inputScale');
+      if (inputElement) {
+        inputElement.value = '';
+      }
       setKeyword('');
       setCardItems([]);
     };
@@ -116,8 +119,6 @@ const Navbar = () => {
       window.removeEventListener('popstate', handleURLChange);
     };
   }, [location.pathname]);
-
-  console.log(currentURL);
 
   return (
     <div className="navbar">
