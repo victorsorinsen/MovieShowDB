@@ -17,6 +17,8 @@ const Navbar = () => {
   const [dropDownTitle, setDropdownTitle] = useState('All');
   const [focusedButton, setFocusedButton] = useState(false);
   const [cardItems, setCardItems] = useState([]);
+  const [currentURL, setCurrentURL] = useState(window.location.href);
+  const location = useLocation();
 
   const handleClick = () => {
     navigate(`/SearchResults/${dropDownTitle}/${keyword}`);
@@ -99,17 +101,23 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const handleRouteChange = () => {
+    const handleURLChange = () => {
+      console.log('Current URL:', location.pathname);
+
       setKeyword('');
       setCardItems([]);
     };
 
-    window.addEventListener('popstate', handleRouteChange);
+    handleURLChange();
+
+    window.addEventListener('popstate', handleURLChange);
 
     return () => {
-      window.removeEventListener('popstate', handleRouteChange);
+      window.removeEventListener('popstate', handleURLChange);
     };
-  }, []);
+  }, [location.pathname]);
+
+  console.log(currentURL);
 
   return (
     <div className="navbar">
