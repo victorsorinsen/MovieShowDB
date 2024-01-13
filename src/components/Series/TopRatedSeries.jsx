@@ -105,7 +105,7 @@ function TopRatedSeries() {
           }
         });
         setWatchlistItems(myData);
-        console.log('Watchlist Data:', myData); // Log watchlist data
+        console.log('Watchlist Data:', myData);
       } else {
         console.log('User is not authenticated');
       }

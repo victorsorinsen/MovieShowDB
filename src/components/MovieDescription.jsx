@@ -159,11 +159,11 @@ const MovieDescription = () => {
     }
   };
 
-  const isItemInWatchlist = (itemId) => {
-    const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
-    console.log('Is Item in Watchlist:', isInWatchlist);
-    return isInWatchlist;
-  };
+  // const isItemInWatchlist = (itemId) => {
+  //   const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
+  //   console.log('Is Item in Watchlist:', isInWatchlist);
+  //   return isInWatchlist;
+  // };
 
   console.log(movieDetails);
 
@@ -180,14 +180,6 @@ const MovieDescription = () => {
   };
 
   const { isInWatchlist, docId } = isItemInWatchlistthree(movieDetails.title);
-
-  // if (isInWatchlist) {
-  //   // The movie is in the watchlist, and you can use the docId value
-  //   console.log('Movie is in watchlist. DocId:', docId);
-  // } else {
-  //   // The movie is not in the watchlist
-  //   console.log('Movie is not in watchlist.');
-  // }
 
   return (
     <>
@@ -243,7 +235,6 @@ const MovieDescription = () => {
                 </button>
               </div>
               <GoDotFill className="movieDots" />
-              {/* <AddAndRemove /> */}
               <div>
                 {!isInWatchlist ? (
                   <button

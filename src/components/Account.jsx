@@ -58,7 +58,6 @@ const account = () => {
         // photoURL: 'https://example.com/jane-q-user/profile.jpg',
       });
       setDisplayName(editProfileName);
-      // Update successful.
       console.log('Updated display name:', auth.currentUser.displayName);
     } catch (e) {
       setError(e.message);

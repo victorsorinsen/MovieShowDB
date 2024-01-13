@@ -35,7 +35,7 @@ const Home = () => {
   const getData = async () => {
     try {
       const myData = [];
-      const userId = auth.currentUser?.uid; // Use optional chaining to avoid errors
+      const userId = auth.currentUser?.uid;
       if (userId) {
         const querySnapshot = await getDocs(collection(db, userId));
         querySnapshot.forEach((doc) => {
@@ -50,7 +50,7 @@ const Home = () => {
         });
         setMovieData(myData);
       } else {
-        console.log('User is not authenticated'); // Log a message or handle the case where the user is not authenticated
+        console.log('User is not authenticated');
       }
     } catch (error) {
       console.error('Error fetching data from Firestore:', error);

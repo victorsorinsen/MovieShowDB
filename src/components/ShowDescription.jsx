@@ -150,7 +150,7 @@ const ShowDescription = () => {
           }
         });
         setWatchlistItems(myData);
-        console.log('Watchlist Data:', myData); // Log watchlist data
+        console.log('Watchlist Data:', myData);
       } else {
         console.log('User is not authenticated');
       }
@@ -180,10 +180,8 @@ const ShowDescription = () => {
   const { isInWatchlist, docId } = isItemInWatchlistthree(movieDetails.name);
 
   if (isInWatchlist) {
-    // The movie is in the watchlist, and you can use the docId value
     console.log('Movie is in watchlist. DocId:', docId);
   } else {
-    // The movie is not in the watchlist
     console.log('Movie is not in watchlist.');
   }
 
