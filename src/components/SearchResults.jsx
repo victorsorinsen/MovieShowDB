@@ -11,6 +11,7 @@ import { getDocs, collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { UserAuth } from '../context/AuthContext';
 import { getAuth } from 'firebase/auth';
+import { Tab, Tabs } from 'react-bootstrap';
 
 const SearchResults = () => {
   const { keyword } = useParams();
@@ -35,7 +36,7 @@ const SearchResults = () => {
             name: result.name,
             poster_path:
               'https://www.themoviedb.org/t/p/original' + result.poster_path,
-            vote_average: parseFloat(result.vote_average.toFixed(1)),
+            // vote_average: parseFloat(result.vote_average.toFixed(1)),
             id: result.id,
             backdrop_path:
               'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
@@ -45,6 +46,10 @@ const SearchResults = () => {
             overview: result.overview,
             popularity: result.popularity,
             mediaType: result.media_type,
+            job: result.known_for_department,
+            known_for: result.known_for,
+            profile_path:
+              'https://www.themoviedb.org/t/p/original' + result.profile_path,
           };
         });
         setCardItems(items);
@@ -69,7 +74,7 @@ const SearchResults = () => {
           name: result.name,
           poster_path:
             'https://www.themoviedb.org/t/p/original' + result.poster_path,
-          vote_average: parseFloat(result.vote_average.toFixed(1)),
+          // vote_average: parseFloat(result.vote_average.toFixed(1)),
           id: result.id,
           backdrop_path:
             'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
@@ -78,6 +83,11 @@ const SearchResults = () => {
           genres: result.genre_ids,
           overview: result.overview,
           popularity: result.popularity,
+          job: result.known_for_department,
+          mediaType: result.media_type,
+          known_for: result.known_for,
+          profile_path:
+            'https://www.themoviedb.org/t/p/original' + result.profile_path,
         };
       });
       setCardItems((prevItems) => [...prevItems, ...newItems]);
@@ -97,135 +107,214 @@ const SearchResults = () => {
 
   const userId = auth.currentUser?.uid;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await getWatchlistData();
-      await getDataFromServer();
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await getWatchlistData();
+  //     await getDataFromServer();
+  //   };
 
-    fetchData();
-    if (userId) {
-      const unsubscribe = onSnapshot(collection(db, userId), () => {
-        fetchData();
-      });
+  //   fetchData();
+  //   if (userId) {
+  //     const unsubscribe = onSnapshot(collection(db, userId), () => {
+  //       fetchData();
+  //     });
 
-      return () => {
-        unsubscribe();
-      };
-    }
-  }, [userId]);
+  //     return () => {
+  //       unsubscribe();
+  //     };
+  //   }
+  // }, [userId]);
 
-  const getWatchlistData = async () => {
-    try {
-      const myData = [];
+  // const getWatchlistData = async () => {
+  //   try {
+  //     const myData = [];
 
-      if (userId) {
-        const querySnapshot = await getDocs(collection(db, userId));
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          const movieData = data.item;
+  //     if (userId) {
+  //       const querySnapshot = await getDocs(collection(db, userId));
+  //       querySnapshot.forEach((doc) => {
+  //         const data = doc.data();
+  //         const movieData = data.item;
 
-          if (movieData) {
-            myData.push({ docId: doc.id, ...movieData });
-          } else {
-            console.log('Item is undefined');
-          }
-        });
-        setWatchlistItems(myData);
-        console.log('Watchlist Data:', myData);
-      } else {
-        console.log('User is not authenticated');
-      }
-    } catch (error) {
-      console.error('Error fetching watchlist data from Firestore:', error);
-    }
-  };
+  //         if (movieData) {
+  //           myData.push({ docId: doc.id, ...movieData });
+  //         } else {
+  //           console.log('Item is undefined');
+  //         }
+  //       });
+  //       setWatchlistItems(myData);
+  //       console.log('Watchlist Data:', myData);
+  //     } else {
+  //       console.log('User is not authenticated');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching watchlist data from Firestore:', error);
+  //   }
+  // };
 
-  const isItemInWatchlist = (itemId) => {
-    const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
-    console.log('Is Item in Watchlist:', isInWatchlist);
-    return isInWatchlist;
-  };
+  // const isItemInWatchlist = (itemId) => {
+  //   const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
+  //   console.log('Is Item in Watchlist:', isInWatchlist);
+  //   return isInWatchlist;
+  // };
 
   return (
-    <div>
-      {/* <Background /> */}
-      <h2 className="genreTitle">Results for: "{keyword}"</h2>
-      <div className="genrecardz" id="sliderMostPopular">
-        {cardItems.map((item, index) => (
-          <Card className="genrecard" key={index}>
-            <div className="imageDiv">
-              {item.mediaType === 'movie' ? (
-                <Link to={`/movies/${item.id}`}>
-                  <Card.Img variant="top" src={item.poster_path} />
-                </Link>
-              ) : (
-                <Link to={`/tv/${item.id}`}>
-                  <Card.Img variant="top" src={item.poster_path} />
-                </Link>
-              )}
-            </div>
-            <Card.Body>
-              <Card.Title>
-                {item.mediaType === 'movie' ? (
-                  <Link className="cardMovieTitle" to={`/movies/${item.id}`}>
-                    <b>{item.title}</b>
-                  </Link>
-                ) : (
-                  <Link className="cardMovieTitle" to={`/tv/${item.id}`}>
-                    <b>{item.name}</b>
-                  </Link>
-                )}
-              </Card.Title>
-              <Card.Text>
-                <div className="cardDetails">
-                  <div className="rating">
-                    <FaStar className="starrating" size={25} />
-                    <span>
-                      <b>{item.vote_average}</b>
-                    </span>
-                  </div>
-                  <div className="addWatchlist">
-                    {!isItemInWatchlist(item.id) ? (
-                      <Button
-                        className="addWatchlistButton"
-                        variant="primary"
-                        title="Add to Watchlist"
-                        onClick={() => {
-                          if (authenticated) {
-                            addItemToWatchlist(item);
-                            // getWatchlistData();
-                          } else {
-                            window.location.href = '/signin';
-                          }
-                        }}
-                      >
-                        +
-                      </Button>
-                    ) : (
-                      <Button
-                        className="inWatchlist"
-                        onClick={() => navigate('/Account')}
-                      >
-                        In Watchlist
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
-      </div>
-      <div className="loadMore">
-        <button
-          className="buton signInButon btn btn-primary"
-          onClick={loadMore}
+    <>
+      <h2 className="genreTitle">Search results for: "{keyword}"</h2>
+      <div className="watchlistContainer">
+        <Tabs
+          defaultActiveKey="Movies"
+          id="uncontrolled-tab-example"
+          className="mb-3"
         >
-          Load More
-        </button>
+          {cardItems.some((item) => item.mediaType === 'movie') && (
+            <Tab eventKey="Movies" title="Movies">
+              {cardItems.length > 0 && (
+                <div className="creditsTabDiv">
+                  {cardItems.map((item, index) =>
+                    item.mediaType === 'movie' ? (
+                      <div className="creditItemDiv" key={index}>
+                        <div className="creditImage">
+                          {item.poster_path.endsWith('null') ? (
+                            <img
+                              src="/src/assets/No-Image-Placeholder.png"
+                              alt=""
+                              className="searchImage"
+                            />
+                          ) : (
+                            <img
+                              src={item.poster_path}
+                              alt=""
+                              className="searchImage"
+                            />
+                          )}
+                        </div>
+                        <div className="creditDetailsDiv">
+                          <div className="titleDate">
+                            <Link to={`/movies/${item.id}`}>
+                              <b>{item.title}</b>
+                            </Link>
+                          </div>
+                          <p className="smallerText" key={index}>
+                            <FaStar className="starrating" size={20} />
+                            {item.vote_average}
+                          </p>
+                          <div>{item.release_date}</div>
+                        </div>
+                      </div>
+                    ) : null
+                  )}
+                </div>
+              )}
+              <div className="loadMore">
+                <button
+                  className="buton signInButon btn btn-primary"
+                  onClick={loadMore}
+                >
+                  Load More
+                </button>
+              </div>
+            </Tab>
+          )}
+          {cardItems.some((item) => item.mediaType === 'tv') && (
+            <Tab eventKey="TV Shows" title="TV Shows">
+              {cardItems.length > 0 && (
+                <div className="creditsTabDiv">
+                  {cardItems.map((item, index) =>
+                    item.mediaType === 'tv' ? (
+                      <div className="creditItemDiv" key={index}>
+                        <div className="creditImage">
+                          {item.poster_path.endsWith('null') ? (
+                            <img
+                              src="/src/assets/No-Image-Placeholder.png"
+                              alt=""
+                              className="searchImage"
+                            />
+                          ) : (
+                            <img
+                              src={item.poster_path}
+                              alt=""
+                              className="searchImage"
+                            />
+                          )}
+                        </div>
+                        <div className="creditDetailsDiv">
+                          <div className="titleDate">
+                            <Link to={`/movies/${item.id}`}>
+                              <b>{item.name}</b>
+                            </Link>
+                          </div>
+                          <p className="smallerText" key={index}>
+                            <FaStar className="starrating" size={20} />
+                            {item.vote_average}
+                          </p>
+                          <div>{item.first_air_date}</div>
+                        </div>
+                      </div>
+                    ) : null
+                  )}
+                </div>
+              )}
+              <div className="loadMore">
+                <button
+                  className="buton signInButon btn btn-primary"
+                  onClick={loadMore}
+                >
+                  Load More
+                </button>
+              </div>
+            </Tab>
+          )}
+          {cardItems.some((item) => item.mediaType === 'person') && (
+            <Tab eventKey="People" title="People">
+              {cardItems.length > 0 && (
+                <div className="creditsTabDiv">
+                  {cardItems.map((item, index) =>
+                    item.mediaType === 'person' ? (
+                      <div className="creditItemDiv" key={index}>
+                        <div className="creditImage">
+                          {item.profile_path.endsWith('null') ? (
+                            <img
+                              src="/src/assets/No-Image-Placeholder.png"
+                              alt=""
+                              className="searchImage"
+                            />
+                          ) : (
+                            <img
+                              src={item.profile_path}
+                              alt=""
+                              className="searchImage"
+                            />
+                          )}
+                        </div>
+                        <div className="creditDetailsDiv">
+                          <div className="titleDate">
+                            <Link to={`/person/${item.id}`}>
+                              <b>{item.name}</b>
+                            </Link>
+                          </div>
+                          <p className="smallerText" key={index}>
+                            {item.job}
+                          </p>
+                          {/* <div>{item.known_for[0]}</div> */}
+                        </div>
+                      </div>
+                    ) : null
+                  )}
+                </div>
+              )}
+              <div className="loadMore">
+                <button
+                  className="buton signInButon btn btn-primary"
+                  onClick={loadMore}
+                >
+                  Load More
+                </button>
+              </div>
+            </Tab>
+          )}
+        </Tabs>
       </div>
-    </div>
+    </>
   );
 };
 

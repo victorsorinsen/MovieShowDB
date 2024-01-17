@@ -13,10 +13,21 @@ body {
   color: var(--color-one);
   min-height: 100vh;
   position: relative;
+  background: url('/src/assets/background.png') no-repeat center center fixed;
+  z-index: -10;
+  background-size: cover;
 }
 
 .mainContent {
   padding-bottom: 70px;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.mainContent .backgroundImg {
+  z-index: -10;
+  position: absolute;
+  margin-top: 60px;
 }
 
 ::-webkit-scrollbar {
@@ -84,6 +95,12 @@ body {
   line-height: 1;
 }
 
+.searchbar .searchbutton {
+  height: 30px;
+  line-height: 1;
+  align-self: center;
+}
+
 .searchbar input {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -94,6 +111,7 @@ body {
   display: flex;
   width: 200px;
   justify-content: end;
+  align-items: center;
 }
 
 .menuicon {
@@ -164,19 +182,6 @@ input {
   text-align: center;
 }
 
-.accountIcon {
-  text-decoration: none;
-  color: var(--color-six);
-  align-self: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.accountIcon:hover {
-  color: var(--color-one);
-}
-
 .buton:hover {
   background-color: var(--color-one);
   border-color: var(--color-one);
@@ -231,13 +236,17 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .cardMovieTitle {
+  display: block;
   text-decoration: none;
   color: black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  height: 5rem;
 }
 
 .imageDiv:active {
@@ -303,13 +312,13 @@ input.form-control:focus {
   position: absolute;
   width: 80%;
   max-width: 519.14px;
-  margin-top: 37px;
-  background-color: white;
+  margin-top: 42px;
+  background-color: #1d1d22;
   height: auto;
   z-index: 1;
   border-radius: 0.5rem;
-  border: 1px solid var(--color-seven);
-  transition: all 0.5s ease;
+  /* border: 1px solid var(--color-six); */
+  /* transition: all 0.5s ease; */
 }
 
 .searchResultsDrop a {
@@ -319,13 +328,14 @@ input.form-control:focus {
 .searchItemDiv {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid black;
+  border-bottom: 0.1px solid grey;
   padding: 5px;
   padding-bottom: 5px;
+  padding-left: 10px;
   max-width: 100%;
   align-items: center;
-  color: var(--color-seven);
-  transition: all 0.5s ease;
+  color: var(--color-six);
+  /* transition: all 0.5s ease; */
 }
 
 .searchItemDiv .img {
@@ -334,14 +344,15 @@ input.form-control:focus {
 .searchItemDiv:hover,
 .searchResultsAll:hover {
   cursor: pointer;
-  background-color: #e4e3e3;
-  /* color: var(--color-one); */
+  /* background-color: #e4e3e3; */
+  color: var(--color-one);
   border-radius: 0.5rem;
 }
 
 .searchItemDiv:active,
 .searchResultsAll:active {
-  background-color: #b9b9b9;
+  background-color: #0e0e0f;
+  color: var(--color-two);
 }
 
 .searchImage {
@@ -367,7 +378,7 @@ input.form-control:focus {
 .searchResultsAll {
   padding-left: 5px;
   text-decoration: none;
-  color: var(--color-one);
+  color: var(--color-six);
 }
 
 .container input.form-control:focus {
@@ -384,25 +395,19 @@ input.form-control:focus {
   margin-left: 60px;
 }
 
-.userAccountDisplay {
-  margin-bottom: 0;
-  align-self: center;
-  margin-left: 5px;
-  margin-right: 5px;
-  white-space: nowrap;
-}
-
 .container {
   margin-top: 100px;
   height: 350px;
-  border: 1px solid var(--color-five);
+  /* border: 1px solid var(--color-five); */
   margin-bottom: 5px;
   padding-bottom: 10px;
   padding-top: 10px;
   min-width: none;
   width: 500px;
-  box-shadow: 2px 2px 2px 2px #d3c4ae;
+  box-shadow: 2px 2px 2px 2px var(--color-five);
   position: relative;
+  background-color: var(--color-six);
+  border-radius: 1rem;
 }
 
 .container-modal {
@@ -460,6 +465,10 @@ input.form-control:focus {
   border-radius: 1rem;
 }
 
+.carousel-indicators {
+  background-color: var(--color-six);
+}
+
 [data-bs-theme='dark'].carousel .carousel-indicators [data-bs-target] {
   background-color: var(--color-one);
 }
@@ -504,12 +513,15 @@ input.form-control:focus {
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
+  overflow: hidden;
 }
 
 .rating {
   display: flex;
   align-items: center;
   font-size: large;
+  flex: 1;
+  width: 100%;
 }
 
 .starrating {
@@ -629,12 +641,13 @@ input.form-control:focus {
 .descriptionPage {
   margin: 60px 200px 60px 200px;
   border: 1px solid var(--color-five);
-  padding: 10px 10px 10px 10px;
-  /* background-color: rgba(0, 0, 0, 0); */
+  padding: 20px;
+  background-color: var(--color-six);
   color: #000000;
   border-radius: 1rem;
   position: relative;
-  box-shadow: 2px 2px 2px 2px #4e4e50;
+  box-shadow: 3px 3px 3px 3px var(--color-five);
+  z-index: 2;
 }
 
 .backdropImage {
@@ -662,7 +675,7 @@ input.form-control:focus {
 }
 
 .divDescription {
-  margin-left: 15px;
+  margin-left: 25px;
 }
 
 .divDescription h1 {
@@ -928,6 +941,7 @@ input.form-control:focus {
 .dropdown-menu {
   background-color: var(--color-six);
   padding: 5px;
+  min-width: auto;
 }
 
 .dropdown-menu a {
@@ -1032,6 +1046,39 @@ input.form-control:focus {
 
 .accountButtons .buton {
   color: #ffffff;
+}
+
+.nav-item .dropdown-toggle {
+  height: 40px;
+  padding: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.nav-item .dropdown-toggle div {
+  display: flex;
+  align-items: center;
+}
+.nav-item .dropdown-toggle p {
+  margin-left: 5px;
+}
+
+.nav-item .dropdown-toggle:active {
+  background-color: var(--color-one);
+  border-color: var(--color-one);
+}
+
+.btn-check:checked + .btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check) + .btn:active {
+  background-color: var(--color-one);
+  border-color: var(--color-one);
+}
+
+.nav-item .dropdown-toggle::after {
+  display: none;
 }
 
 .editProfileButton {
@@ -1146,6 +1193,8 @@ input.form-control:focus {
 
 .watchlistContainer h2 {
   margin-left: 200px;
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 
 .noMoviesDiv {
@@ -1157,16 +1206,17 @@ input.form-control:focus {
 .watchlistDescription {
   margin: 0px 200px 60px 200px;
   /* border: 1px solid var(--color-five); */
-  padding: 10px 10px 10px 10px;
-  /* background-color: var(--color-five); */
-  color: #000000;
+  padding: 15px 15px 15px 15px;
+  background-color: var(--color-five);
+  color: var(--color-six);
   border-radius: 1rem;
   font-size: smaller;
-  box-shadow: 4px 4px 4px 4px #887e70;
+  box-shadow: 3px 3px 3px 3px var(--color-five);
   position: relative;
+  z-index: 2;
 }
 
-.watchlistDescription .backdropImage {
+/* .watchlistDescription .backdropImage {
   opacity: 0.3;
   filter: saturate(0.5);
   border-radius: 1rem;
@@ -1178,10 +1228,19 @@ input.form-control:focus {
   width: 100%;
   height: 100%;
   z-index: -1;
-}
+} */
 
 .movieDots {
   color: var(--color-one);
+}
+
+.watchlistMovieTitle {
+  display: block;
+  text-decoration: none;
+  color: black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 
 .descrWatchlistImage {
@@ -1191,11 +1250,12 @@ input.form-control:focus {
 }
 
 .divWatchlistDescription {
-  margin-left: 15px;
+  margin-left: 20px;
 }
 
 .divWatchlistDescription h1 {
   font-size: x-large;
+  color: white;
 }
 
 .generalWatchlistDescription {
@@ -1212,6 +1272,7 @@ input.form-control:focus {
 
 .watchlistMovieRatingYearRuntime .watchlistButton {
   background-color: rgba(0, 0, 0, 0);
+  border-color: var(--color-one);
 }
 
 .watchlistMovieRatingYearRuntime .watchlistButton:hover {
@@ -1301,6 +1362,7 @@ p {
   margin-left: 200px;
   border-color: var(--color-one);
   margin-right: 200px;
+  font-weight: bold;
 }
 
 .nav-tabs .nav-link {
@@ -1377,7 +1439,7 @@ p {
   margin: 60px 200px 60px 200px;
   border: 1px solid var(--color-five);
   padding: 10px 10px 10px 10px;
-  /* background-color: rgba(0, 0, 0, 0); */
+  background-color: var(--color-six);
   color: #000000;
   border-radius: 1rem;
   position: relative;
@@ -1542,10 +1604,10 @@ p {
 
 .creditItemDiv {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   border-bottom: 1px solid black;
-  padding: 5px;
-  padding-bottom: 5px;
+  padding: 10px;
+  /* padding-bottom: 5px; */
   max-width: 100%;
   align-items: center;
   color: var(--color-seven);
@@ -1591,4 +1653,14 @@ p {
 
 .dateDisplay {
   margin-left: auto;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.loadingBar .progress-bar {
+  background-color: var(--color-one);
+}
+
+.loadingBar {
+  height: 2px;
 }

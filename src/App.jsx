@@ -19,6 +19,7 @@ import SearchResults from './components/SearchResults.jsx';
 import MovieSearchResults from './components/MovieSearchResults.jsx';
 import ShowSearchResults from './components/ShowSearchResults.jsx';
 import PersonDescription from './components/PersonDescription.jsx';
+import Watchlist from './components/Watchlist.jsx';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path="/Movies/:id" element={<MovieDescription />} />
           <Route path="/tv/:id" element={<ShowDescription />} />
           <Route path="/Person/:id" element={<PersonDescription />} />
+          <Route path="/Watchlist" element={<Watchlist />} />
           <Route
             path="/SearchResults/All/:keyword"
             element={<SearchResults />}

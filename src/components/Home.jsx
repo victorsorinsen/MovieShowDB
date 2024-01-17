@@ -1,5 +1,5 @@
 import React from 'react';
-// import Background from './Background';
+// import Background from './background';
 import TrendingMovies from './Movies/TrendingMovies';
 import TrendingSeries from './Series/TrendingSeries';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -94,7 +94,7 @@ const Home = () => {
           <Dropdown.Menu>
             <Dropdown.Item href="./Movies">Movies</Dropdown.Item>
             <Dropdown.Item href="./Series">TV Shows</Dropdown.Item>
-            <Dropdown.Item href={authenticated ? './Account' : './signin'}>
+            <Dropdown.Item href={authenticated ? './Watchlist' : './signin'}>
               Watchlist
             </Dropdown.Item>
           </Dropdown.Menu>

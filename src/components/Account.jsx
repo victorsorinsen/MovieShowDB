@@ -169,8 +169,7 @@ const account = () => {
               className="editProfileName"
               type="text"
               id="inputName"
-              value={user.displayName}
-              // placeholder={profileName.textContent}
+              placeholder={user.displayName}
               onChange={handleInput}
               onClick={handleInputClick}
             />
@@ -212,9 +211,6 @@ const account = () => {
           <>
             {/* <Background /> */}
             <div className="container-modal">
-              {/* <div className="textsign">
-                <h1>Update Email</h1>
-              </div> */}
               <Form className="form" onSubmit={UpdateEmail}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Current Password</Form.Label>
@@ -257,9 +253,6 @@ const account = () => {
           <>
             {/* <Background /> */}
             <div className="container-modal">
-              {/* <div className="textsign">
-                <h1>Update Email</h1>
-              </div> */}
               <Form className="form" onSubmit={UpdatePassword}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Current Password</Form.Label>
@@ -287,8 +280,6 @@ const account = () => {
           </>
         </Modal.Body>
       </Modal>
-
-      <Watchlist />
     </>
   );
 };

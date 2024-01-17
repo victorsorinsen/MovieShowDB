@@ -96,7 +96,7 @@ const MovieGenre = () => {
   useEffect(() => {
     const fetchData = async () => {
       await getWatchlistData();
-      await getDataFromServer();
+      // await getDataFromServer();
     };
 
     fetchData();
