@@ -159,8 +159,8 @@ const SearchResults = () => {
 
   return (
     <>
-      <h2 className="genreTitle">Search results for: "{keyword}"</h2>
-      <div className="watchlistContainer">
+      <div className="resultsContainer">
+        <h2 className="resultsTitle">Search results for: "{keyword}"</h2>
         <Tabs
           defaultActiveKey="Movies"
           id="uncontrolled-tab-example"
@@ -169,7 +169,7 @@ const SearchResults = () => {
           {cardItems.some((item) => item.mediaType === 'movie') && (
             <Tab eventKey="Movies" title="Movies">
               {cardItems.length > 0 && (
-                <div className="creditsTabDiv">
+                <div className="resultsTabDiv">
                   {cardItems.map((item, index) =>
                     item.mediaType === 'movie' ? (
                       <div className="creditItemDiv" key={index}>

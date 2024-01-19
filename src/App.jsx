@@ -20,6 +20,7 @@ import MovieSearchResults from './components/MovieSearchResults.jsx';
 import ShowSearchResults from './components/ShowSearchResults.jsx';
 import PersonDescription from './components/PersonDescription.jsx';
 import Watchlist from './components/Watchlist.jsx';
+import PeopleSearchResults from './components/PeopleSearchResults.jsx';
 
 function App() {
   return (
@@ -53,6 +54,10 @@ function App() {
           <Route
             path="/SearchResults/TV Shows/:keyword"
             element={<ShowSearchResults />}
+          />
+          <Route
+            path="/SearchResults/People/:keyword"
+            element={<PeopleSearchResults />}
           />
           <Route
             path="/account"

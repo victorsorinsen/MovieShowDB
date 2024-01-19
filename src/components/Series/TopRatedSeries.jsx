@@ -180,7 +180,7 @@ function TopRatedSeries() {
                       ) : (
                         <Button
                           className="inWatchlist"
-                          onClick={() => navigate('/Account')}
+                          onClick={() => navigate('/Watchlist')}
                         >
                           In Watchlist
                         </Button>
