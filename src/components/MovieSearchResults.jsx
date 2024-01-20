@@ -1,17 +1,15 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 // import Background from '../background';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { addItemToWatchlist } from './exportFunctions';
 import { useNavigate } from 'react-router-dom';
 import { getDocs, collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { UserAuth } from '../context/AuthContext';
 import { getAuth } from 'firebase/auth';
+import { Tab, Tabs } from 'react-bootstrap';
 
 const SearchResults = () => {
   const { keyword } = useParams();
@@ -37,8 +35,8 @@ const SearchResults = () => {
               'https://www.themoviedb.org/t/p/original' + result.poster_path,
             vote_average: parseFloat(result.vote_average.toFixed(1)),
             id: result.id,
-            backdrop_path:
-              'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
+            poster_path:
+              'https://www.themoviedb.org/t/p/original' + result.poster_path,
             release_date: result.release_date || 'Unreleased',
             genres: result.genre_ids,
             overview: result.overview,
@@ -68,8 +66,8 @@ const SearchResults = () => {
             'https://www.themoviedb.org/t/p/original' + result.poster_path,
           vote_average: parseFloat(result.vote_average.toFixed(1)),
           id: result.id,
-          backdrop_path:
-            'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
+          poster_path:
+            'https://www.themoviedb.org/t/p/original' + result.poster_path,
           release_date: result.release_date || 'Unreleased',
           genres: result.genre_ids,
           overview: result.overview,
@@ -93,129 +91,60 @@ const SearchResults = () => {
 
   const userId = auth.currentUser?.uid;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await getWatchlistData();
-      await getDataFromServer();
-    };
-
-    fetchData();
-    if (userId) {
-      const unsubscribe = onSnapshot(collection(db, userId), () => {
-        fetchData();
-      });
-
-      return () => {
-        unsubscribe();
-      };
-    }
-  }, [userId]);
-
-  const getWatchlistData = async () => {
-    try {
-      const myData = [];
-
-      if (userId) {
-        const querySnapshot = await getDocs(collection(db, userId));
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          const movieData = data.item;
-
-          if (movieData) {
-            myData.push({ docId: doc.id, ...movieData });
-          } else {
-            console.log('Item is undefined');
-          }
-        });
-        setWatchlistItems(myData);
-        console.log('Watchlist Data:', myData);
-      } else {
-        console.log('User is not authenticated');
-      }
-    } catch (error) {
-      console.error('Error fetching watchlist data from Firestore:', error);
-    }
-  };
-
-  const isItemInWatchlist = (itemId) => {
-    const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
-    console.log('Is Item in Watchlist:', isInWatchlist);
-    return isInWatchlist;
-  };
-
   return (
-    <div>
-      {/* <Background /> */}
-      <h2 className="genreTitle">Results for: "{keyword}"</h2>
-      <div className="genrecardz" id="sliderMostPopular">
-        {cardItems.map((item, index) => (
-          <Card className="genrecard" key={index}>
-            <div className="imageDiv">
-              <Link to={`/movies/${item.id}`}>
-                {item.poster_path.endsWith(null) ? (
-                  <Card.Img
-                    variant="top"
-                    src="/src/assets/No-Image-Placeholder.png"
-                  />
-                ) : (
-                  <Card.Img variant="top" src={item.poster_path} />
-                )}
-              </Link>
-            </div>
-            <Card.Body>
-              <Card.Title>
-                <Link className="cardMovieTitle" to={`/movies/${item.id}`}>
-                  <b>{item.title}</b>
-                </Link>
-              </Card.Title>
-              <Card.Text>
-                <div className="cardDetails">
-                  <div className="rating">
-                    <FaStar className="starrating" size={25} />
-                    <span>
-                      <b>{item.vote_average}</b>
-                    </span>
-                  </div>
-                  <div className="addWatchlist">
-                    {!isItemInWatchlist(item.id) ? (
-                      <Button
-                        className="addWatchlistButton"
-                        variant="primary"
-                        title="Add to Watchlist"
-                        onClick={() => {
-                          if (authenticated) {
-                            addItemToWatchlist(item);
-                            // getWatchlistData();
-                          } else {
-                            window.location.href = '/signin';
-                          }
-                        }}
-                      >
-                        +
-                      </Button>
+    <div className="resultsContainer">
+      <h2 className="resultsTitle">Search results for: "{keyword}"</h2>
+      <Tabs
+        defaultActiveKey="Movies"
+        id="uncontrolled-tab-example"
+        className="mb-3"
+      >
+        <Tab eventKey="Movies" title="Movies">
+          {cardItems.length > 0 && (
+            <div className="resultsTabDiv">
+              {cardItems.map((item, index) => (
+                <div className="creditItemDiv" key={index}>
+                  <div className="creditImage">
+                    {item.poster_path.endsWith('null') ? (
+                      <img
+                        src="/src/assets/No-Image-Placeholder.png"
+                        alt=""
+                        className="searchImage"
+                      />
                     ) : (
-                      <Button
-                        className="inWatchlist"
-                        onClick={() => navigate('/Account')}
-                      >
-                        In Watchlist
-                      </Button>
+                      <img
+                        src={item.poster_path}
+                        alt=""
+                        className="searchImage"
+                      />
                     )}
                   </div>
+                  <div className="creditDetailsDiv">
+                    <div className="titleDate">
+                      <Link to={`/movies/${item.id}`}>
+                        <b>{item.title}</b>
+                      </Link>
+                    </div>
+                    <p className="smallerText" key={index}>
+                      <FaStar className="starrating" size={20} />
+                      {item.vote_average}
+                    </p>
+                    <div>{item.release_date}</div>
+                  </div>
                 </div>
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        ))}
-      </div>
-      <div className="loadMore">
-        <button
-          className="buton signInButon btn btn-primary"
-          onClick={loadMore}
-        >
-          Load More
-        </button>
-      </div>
+              ))}
+            </div>
+          )}
+          <div className="loadMore">
+            <button
+              className="buton signInButon btn btn-primary"
+              onClick={loadMore}
+            >
+              Load More
+            </button>
+          </div>
+        </Tab>
+      </Tabs>
     </div>
   );
 };

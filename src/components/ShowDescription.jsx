@@ -188,7 +188,6 @@ const ShowDescription = () => {
   return (
     <>
       {/* <Background /> */}
-      {/* {movieDetails.map((item, index) => ( */}
       <div className="descriptionPage">
         <div
           className="backdropImage"

@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react';
 import { UserAuth } from '../../context/AuthContext';
 import { getAuth } from 'firebase/auth';
 import { addItemToWatchlist } from '../exportFunctions';
-import AddToWatchlistButton from '../AddToWatchlistButton';
 import { useNavigate } from 'react-router-dom';
 import { getDocs, collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase';

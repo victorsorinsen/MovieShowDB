@@ -28,7 +28,6 @@ const MovieDescription = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const auth = getAuth();
   const [watchlistItems, setWatchlistItems] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -184,7 +183,6 @@ const MovieDescription = () => {
   return (
     <>
       {/* <Background /> */}
-      {/* {movieDetails.map((item, index) => ( */}
       <div className={`descriptionPage`}>
         {backdrop_path && (
           <div

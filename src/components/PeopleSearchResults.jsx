@@ -1,14 +1,8 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 // import Background from '../background';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { addItemToWatchlist } from './exportFunctions';
-import { getDocs, collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase';
 import { UserAuth } from '../context/AuthContext';
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +15,7 @@ const SearchResults = () => {
   const authContext = UserAuth();
   const [authenticated, setAuthenticated] = useState(false);
   const auth = getAuth();
-  const [watchlistItems, setWatchlistItems] = useState([]);
+
   const navigate = useNavigate();
 
   useEffect(() => {

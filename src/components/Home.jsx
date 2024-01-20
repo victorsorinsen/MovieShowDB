@@ -5,7 +5,6 @@ import TrendingSeries from './Series/TrendingSeries';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useEffect, useState } from 'react';
 import { UserAuth } from '../context/AuthContext';
-import TestButton from './TestButton';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getAuth } from 'firebase/auth';
@@ -103,7 +102,6 @@ const Home = () => {
       {/* <Background /> */}
       <TrendingMovies />
       <TrendingSeries />
-      <TestButton />
     </>
   );
 };

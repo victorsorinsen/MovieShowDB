@@ -1,14 +1,9 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import { FaStar } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 // import Background from '../background';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { addItemToWatchlist } from './exportFunctions';
-import { getDocs, collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase';
 import { UserAuth } from '../context/AuthContext';
 import { getAuth } from 'firebase/auth';
 import { Tab, Tabs } from 'react-bootstrap';
@@ -18,10 +13,8 @@ const SearchResults = () => {
   const [cardItems, setCardItems] = useState([]);
   let [addmore, setAddMore] = useState(1);
   const authContext = UserAuth();
-
   const [authenticated, setAuthenticated] = useState(false);
   const auth = getAuth();
-  const [watchlistItems, setWatchlistItems] = useState([]);
 
   useEffect(() => {
     const getSearchResults = async () => {
@@ -36,7 +29,7 @@ const SearchResults = () => {
             name: result.name,
             poster_path:
               'https://www.themoviedb.org/t/p/original' + result.poster_path,
-            // vote_average: parseFloat(result.vote_average.toFixed(1)),
+            vote_average: result.vote_average,
             id: result.id,
             backdrop_path:
               'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
@@ -74,7 +67,7 @@ const SearchResults = () => {
           name: result.name,
           poster_path:
             'https://www.themoviedb.org/t/p/original' + result.poster_path,
-          // vote_average: parseFloat(result.vote_average.toFixed(1)),
+          vote_average: result.vote_average,
           id: result.id,
           backdrop_path:
             'https://www.themoviedb.org/t/p/original' + result.backdrop_path,
@@ -106,56 +99,6 @@ const SearchResults = () => {
   }, [authContext]);
 
   const userId = auth.currentUser?.uid;
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await getWatchlistData();
-  //     await getDataFromServer();
-  //   };
-
-  //   fetchData();
-  //   if (userId) {
-  //     const unsubscribe = onSnapshot(collection(db, userId), () => {
-  //       fetchData();
-  //     });
-
-  //     return () => {
-  //       unsubscribe();
-  //     };
-  //   }
-  // }, [userId]);
-
-  // const getWatchlistData = async () => {
-  //   try {
-  //     const myData = [];
-
-  //     if (userId) {
-  //       const querySnapshot = await getDocs(collection(db, userId));
-  //       querySnapshot.forEach((doc) => {
-  //         const data = doc.data();
-  //         const movieData = data.item;
-
-  //         if (movieData) {
-  //           myData.push({ docId: doc.id, ...movieData });
-  //         } else {
-  //           console.log('Item is undefined');
-  //         }
-  //       });
-  //       setWatchlistItems(myData);
-  //       console.log('Watchlist Data:', myData);
-  //     } else {
-  //       console.log('User is not authenticated');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching watchlist data from Firestore:', error);
-  //   }
-  // };
-
-  // const isItemInWatchlist = (itemId) => {
-  //   const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
-  //   console.log('Is Item in Watchlist:', isInWatchlist);
-  //   return isInWatchlist;
-  // };
 
   return (
     <>
@@ -196,7 +139,9 @@ const SearchResults = () => {
                           </div>
                           <p className="smallerText" key={index}>
                             <FaStar className="starrating" size={20} />
-                            {item.vote_average}
+                            {item.vote_average !== undefined
+                              ? parseFloat(item.vote_average.toFixed(1))
+                              : 'N/A'}
                           </p>
                           <div>{item.release_date}</div>
                         </div>
@@ -245,7 +190,9 @@ const SearchResults = () => {
                           </div>
                           <p className="smallerText" key={index}>
                             <FaStar className="starrating" size={20} />
-                            {item.vote_average}
+                            {item.vote_average !== undefined
+                              ? parseFloat(item.vote_average.toFixed(1))
+                              : 'N/A'}
                           </p>
                           <div>{item.first_air_date}</div>
                         </div>

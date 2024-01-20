@@ -22,7 +22,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import { BsArrowDown } from 'react-icons/bs';
 import { BsArrowUp } from 'react-icons/bs';
-import Badge from 'react-bootstrap/Badge';
 
 const Watchlist = () => {
   const authContext = UserAuth();

@@ -1,6 +1,5 @@
 import React from 'react';
 import MostPopular from './Movies/MostPopular';
-import Slider from './Slider';
 import TopRated from './Movies/TopRated';
 import Upcoming from './Movies/Upcoming';
 import Background from './background';

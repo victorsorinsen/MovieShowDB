@@ -1,11 +1,7 @@
 import React from 'react';
 import { FaStar } from 'react-icons/fa';
 import { GoDotFill } from 'react-icons/go';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import { useState, useEffect } from 'react';
-import { CiPlay1 } from 'react-icons/ci';
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 // import Background from './background';
 import { useParams } from 'react-router-dom';
@@ -79,7 +75,6 @@ const PersonDescription = () => {
   }, [id]);
 
   const {
-    also_known_as,
     biography,
     birthday,
     deathday,

@@ -16,7 +16,6 @@ import {
 } from 'firebase/auth';
 import { Form } from 'react-bootstrap';
 import { Alert } from 'react-bootstrap';
-import Watchlist from './Watchlist';
 
 const account = () => {
   const [showEmail, setShowEmail] = useState(false);
@@ -156,7 +155,6 @@ const account = () => {
         <h2>Account Details</h2>
         <div className="accountInfoDiv">
           <FaCircleUser className="profilePic" size={100} />
-          {/* <p>{user && user.email}</p> */}
           {showName && (
             <div className="profileName" id="profileName">
               {user.displayName === null
