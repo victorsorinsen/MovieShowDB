@@ -35,8 +35,6 @@ const SearchResults = () => {
               'https://www.themoviedb.org/t/p/original' + result.poster_path,
             vote_average: parseFloat(result.vote_average.toFixed(1)),
             id: result.id,
-            poster_path:
-              'https://www.themoviedb.org/t/p/original' + result.poster_path,
             release_date: result.release_date || 'Unreleased',
             genres: result.genre_ids,
             overview: result.overview,
@@ -66,8 +64,6 @@ const SearchResults = () => {
             'https://www.themoviedb.org/t/p/original' + result.poster_path,
           vote_average: parseFloat(result.vote_average.toFixed(1)),
           id: result.id,
-          poster_path:
-            'https://www.themoviedb.org/t/p/original' + result.poster_path,
           release_date: result.release_date || 'Unreleased',
           genres: result.genre_ids,
           overview: result.overview,
@@ -104,21 +100,23 @@ const SearchResults = () => {
             <div className="resultsTabDiv">
               {cardItems.map((item, index) => (
                 <div className="creditItemDiv" key={index}>
-                  <div className="creditImage">
-                    {item.poster_path.endsWith('null') ? (
-                      <img
-                        src="/src/assets/No-Image-Placeholder.png"
-                        alt=""
-                        className="searchImage"
-                      />
-                    ) : (
-                      <img
-                        src={item.poster_path}
-                        alt=""
-                        className="searchImage"
-                      />
-                    )}
-                  </div>
+                  <Link to={`/movies/${item.id}`}>
+                    <div className="creditImage">
+                      {item.poster_path.endsWith('null') ? (
+                        <img
+                          src="/src/assets/No-Image-Placeholder.png"
+                          alt=""
+                          className="searchImage"
+                        />
+                      ) : (
+                        <img
+                          src={item.poster_path}
+                          alt=""
+                          className="searchImage"
+                        />
+                      )}
+                    </div>
+                  </Link>
                   <div className="creditDetailsDiv">
                     <div className="titleDate">
                       <Link to={`/movies/${item.id}`}>

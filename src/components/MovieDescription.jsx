@@ -234,6 +234,14 @@ const MovieDescription = () => {
               </div>
               <GoDotFill className="movieDots" />
               <div>
+                <Button className="userReviewsButon">User Reviews</Button>
+              </div>
+              <GoDotFill className="movieDots" />
+              <div>
+                <Button className="userReviewsButon">Add Review</Button>
+              </div>
+              <GoDotFill className="movieDots" />
+              <div>
                 {!isInWatchlist ? (
                   <button
                     className="watchlistButton"
@@ -254,6 +262,7 @@ const MovieDescription = () => {
                   </button>
                 )}
               </div>
+
               <Modal
                 className="trailerModal"
                 show={show}

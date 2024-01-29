@@ -6,14 +6,40 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 import { auth } from '../firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const UserContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  const createUser = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const createUser = async (email, password) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const authUser = userCredential.user;
+
+      await setDoc(doc(db, 'users', authUser.uid), {
+        email: authUser.email,
+        admin: false,
+        edit: false,
+        uid: authUser.uid,
+      });
+
+      return authUser;
+    } catch (error) {
+      if (error.code === 'auth/user-not-found') {
+        console.log('User not found. Please check your email.');
+      } else {
+        console.error('Authentication error:', error.message);
+      }
+    }
   };
+
   const signIn = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   };

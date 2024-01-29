@@ -16,6 +16,11 @@ import {
 } from 'firebase/auth';
 import { Form } from 'react-bootstrap';
 import { Alert } from 'react-bootstrap';
+import { getDoc, getDocs, collection, writeBatch } from 'firebase/firestore';
+import { db } from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, updateDoc } from 'firebase/firestore';
+import { TfiTrash } from 'react-icons/tfi';
 
 const account = () => {
   const [showEmail, setShowEmail] = useState(false);
@@ -26,6 +31,8 @@ const account = () => {
   const [showAlert, setShowAlert] = useState('');
   const [showName, setShowName] = useState(true);
   const authContext = UserAuth();
+  const [showManageUsers, setManageUsers] = useState({});
+  const [showUsers, setShowUsers] = useState([]);
 
   const navigate = useNavigate();
 
@@ -144,6 +151,120 @@ const account = () => {
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        getUserFromFirestore(user);
+      } else {
+        console.log('No authenticated user found.');
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const getUserFromFirestore = async (user) => {
+    try {
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log('Document data:', docSnap.data());
+
+        const userData = docSnap.data();
+
+        setManageUsers(userData);
+      } else {
+        console.log('No such document!');
+      }
+    } catch (error) {
+      console.error('Error fetching data from Firestore:', error);
+    }
+  };
+
+  const getUserListfromFirestore = async () => {
+    try {
+      const userList = [];
+      const querySnapshot = await getDocs(collection(db, 'users'));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const userData = data;
+
+        if (userData) {
+          userList.push(userData);
+          console.log(userList);
+        } else {
+          console.log('Item is undefined');
+        }
+      });
+
+      setShowUsers(userList);
+      console.log(userList);
+    } catch (error) {
+      console.error('Error fetching data from Firestore:', error);
+    }
+  };
+
+  const handleAdminChange = (index) => {
+    setShowUsers((prevUsers) => {
+      const updatedUsers = [...prevUsers];
+      updatedUsers[index] = {
+        ...updatedUsers[index],
+        admin: !updatedUsers[index].admin,
+      };
+      return updatedUsers;
+    });
+  };
+
+  const handleEditChange = (index) => {
+    setShowUsers((prevUsers) => {
+      const updatedUsers = [...prevUsers];
+      updatedUsers[index] = {
+        ...updatedUsers[index],
+        edit: !updatedUsers[index].edit,
+      };
+      return updatedUsers;
+    });
+  };
+
+  const cancelManageUsers = () => {
+    setShowUsers([]);
+  };
+
+  const updateUsers = async () => {
+    try {
+      const batch = writeBatch(db);
+
+      await Promise.all(
+        showUsers.map(async (user) => {
+          try {
+            if (user && user.uid !== undefined) {
+              const userRef = doc(db, 'users', user.uid);
+
+              // Use updateDoc correctly
+              await updateDoc(userRef, {
+                admin: user.admin,
+                edit: user.edit,
+              });
+            } else {
+              console.warn('Skipping user update - missing uid:', user);
+            }
+          } catch (error) {
+            console.error('Error updating a user:', error);
+          }
+        })
+      );
+
+      await batch.commit();
+      setShowUsers([]);
+      console.log('Users updated successfully!');
+    } catch (error) {
+      console.error('Error updating users:', error);
+    }
+  };
+
   return (
     <>
       {showAlert && (
@@ -174,6 +295,16 @@ const account = () => {
           )}
 
           <CiEdit className="editProfileButton" onClick={buttonActions} />
+          {showManageUsers.admin === true ? (
+            <Button
+              className="buton signInButon"
+              onClick={getUserListfromFirestore}
+            >
+              Manage Users
+            </Button>
+          ) : (
+            ''
+          )}
           <div className="accountButtons">
             <Button
               className="buton signInButon"
@@ -278,6 +409,71 @@ const account = () => {
           </>
         </Modal.Body>
       </Modal>
+
+      {showUsers.length !== 0 ? (
+        <div className="manageContainer">
+          <div className="usersContainer">
+            <ul className="userList">
+              <span>
+                <b>Users</b>
+              </span>
+              {showUsers.map((item, index) => (
+                <li key={`user_${index}`} className="userItem">
+                  <span>{item.email}</span>
+                </li>
+              ))}
+            </ul>
+            <ul className="adminUserList">
+              <span>
+                <b>Admin Rights</b>
+              </span>
+              {showUsers.map((item, index) => (
+                <div key={`admin_${index}`} className="checkboxContainer">
+                  <input
+                    type="checkbox"
+                    checked={item.admin}
+                    onChange={() => handleAdminChange(index)}
+                  />
+                </div>
+              ))}
+            </ul>
+            <ul className="reviewUserList">
+              <span>
+                <b>Review Rights</b>
+              </span>
+              {showUsers.map((item, index) => (
+                <div key={`edit_${index}`} className="checkboxContainer">
+                  <input
+                    type="checkbox"
+                    checked={item.edit}
+                    onChange={() => handleEditChange(index)}
+                  />
+                </div>
+              ))}
+            </ul>
+            <ul className="adminUserList">
+              <div className="emptyUl"></div>
+              {showUsers.map((item, index) => (
+                <li key={`user_${index}`} className="userItem">
+                  <button className="watchlistButton">
+                    <TfiTrash /> Delete user
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="userButtons">
+            <Button className="genreButon" onClick={updateUsers}>
+              Confirm
+            </Button>
+            <Button className="genreButon" onClick={cancelManageUsers}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
     </>
   );
 };

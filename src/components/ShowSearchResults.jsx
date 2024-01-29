@@ -104,21 +104,23 @@ const SearchResults = () => {
             <div className="resultsTabDiv">
               {cardItems.map((item, index) => (
                 <div className="creditItemDiv" key={index}>
-                  <div className="creditImage">
-                    {item.poster_path.endsWith('null') ? (
-                      <img
-                        src="/src/assets/No-Image-Placeholder.png"
-                        alt=""
-                        className="searchImage"
-                      />
-                    ) : (
-                      <img
-                        src={item.poster_path}
-                        alt=""
-                        className="searchImage"
-                      />
-                    )}
-                  </div>
+                  <Link to={`/tv/${item.id}`}>
+                    <div className="creditImage">
+                      {item.poster_path.endsWith('null') ? (
+                        <img
+                          src="/src/assets/No-Image-Placeholder.png"
+                          alt=""
+                          className="searchImage"
+                        />
+                      ) : (
+                        <img
+                          src={item.poster_path}
+                          alt=""
+                          className="searchImage"
+                        />
+                      )}
+                    </div>
+                  </Link>
                   <div className="creditDetailsDiv">
                     <div className="titleDate">
                       <Link to={`/tv/${item.id}`}>

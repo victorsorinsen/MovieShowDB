@@ -856,6 +856,26 @@ input.form-control:focus {
   background-color: var(--color-two);
 }
 
+.userReviewsButon {
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: var(--color-one);
+  color: var(--color-six);
+  padding: 1px 5px 1px 5px;
+  border: 1.5px solid var(--color-one);
+  border-radius: 0.5rem;
+  align-items: center;
+  display: flex;
+  padding-right: 5px;
+  font-size: medium;
+}
+
+.userReviewsButon:hover {
+  background-color: var(--color-two);
+  color: var(--color-six);
+  border-color: var(--color-two);
+}
+
 /* HOME PAGE */
 
 .homeText {
@@ -1000,7 +1020,7 @@ input.form-control:focus {
 /* ACCOUNT PAGE */
 
 .accountinfoMainDiv {
-  margin: 60px 200px 60px 200px;
+  margin: 60px 400px 60px 400px;
 }
 
 .accountInfoDiv {
@@ -1018,6 +1038,7 @@ input.form-control:focus {
   margin-right: 0 auto;
   margin-left: 10px;
   align-items: center;
+  color: var(--color-six);
 }
 
 .editProfileName {
@@ -1692,4 +1713,113 @@ p {
 .resultsTitle {
   font-weight: bold;
   margin: 60px 200px 40px 200px;
+}
+
+.manageContainer {
+  background-color: var(--color-six);
+  margin: 60px 400px 60px 400px;
+  border-radius: 1rem;
+  padding: 20px;
+  border: 1px solid var(--color-seven);
+  color: var(--color-seven);
+}
+
+.usersContainer {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--color-six);
+}
+
+.userList {
+  list-style: none;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.userItem > li {
+  display: flex;
+}
+
+.userItem {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.checkboxContainer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.checkboxContainer input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid black;
+  background-color: var(--color-six);
+  color: var(--color-six);
+  width: 24px;
+  height: 24px;
+  border-radius: 0.5rem;
+}
+
+.checkboxContainer input:hover {
+  cursor: pointer;
+}
+
+.checkboxContainer input:checked {
+  background-color: var(--color-one);
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+.adminUserList,
+.reviewUserList {
+  display: inline-block;
+  text-align: center;
+  padding: 0;
+  margin-left: 60px;
+}
+
+.userButtons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.adminUserList .watchlistButton {
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: var(--color-six);
+  color: var(--color-one);
+  padding: 1px 5px 1px 5px;
+  border: 1.5px solid #000000;
+  border-radius: 0.5rem;
+  align-items: center;
+  display: flex;
+  padding-right: 5px;
+  font-size: medium;
+  height: 24px;
+}
+
+.adminUserList .watchlistButton:hover {
+  background-color: var(--color-one);
+  color: var(--color-six);
+}
+
+.adminUserList .watchlistButton:active {
+  background-color: var(--color-two);
+}
+
+.emptyUl {
+  height: 21px;
 }
