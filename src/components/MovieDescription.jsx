@@ -14,10 +14,17 @@ import { addItemToWatchlist, handleRedirect } from './exportFunctions';
 import { TfiTrash } from 'react-icons/tfi';
 import { deleteItemFromWatchlist } from './exportFunctions';
 import { useNavigate } from 'react-router-dom';
-import { getDocs, collection, onSnapshot } from 'firebase/firestore';
+import {
+  getDocs,
+  collection,
+  onSnapshot,
+  setDoc,
+  doc,
+} from 'firebase/firestore';
 import { db } from '../firebase';
 import { UserAuth } from '../context/AuthContext';
 import { getAuth } from 'firebase/auth';
+import Form from 'react-bootstrap/Form';
 
 const MovieDescription = () => {
   const { id } = useParams();
@@ -28,6 +35,13 @@ const MovieDescription = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const auth = getAuth();
   const [watchlistItems, setWatchlistItems] = useState([]);
+  const [showReview, setShowReview] = useState(false);
+  const handleCloseReview = () => setShowReview(false);
+  const handleShowReview = () => setShowReview(true);
+  const [reviewTitle, setReviewTitle] = useState('');
+  const [reviewDescription, setReviewDescription] = useState('');
+  const [reviewRating, setReviewRating] = useState('');
+  const [showApprovedReviews, setShowApprovedReviews] = useState([]);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -180,6 +194,48 @@ const MovieDescription = () => {
 
   const { isInWatchlist, docId } = isItemInWatchlistthree(movieDetails.title);
 
+  const addReview = async (id) => {
+    await setDoc(doc(db, 'reviews', `${id} - ${auth.currentUser.uid}`), {
+      title: reviewTitle,
+      rating: reviewRating,
+      description: reviewDescription,
+      user:
+        auth.currentUser.displayName !== null
+          ? auth.currentUser.displayName
+          : 'Anonymous',
+      uid: auth.currentUser.uid,
+      status: 'pending',
+      date: new Date(),
+      movieTitle: title,
+      movieId: id,
+    });
+  };
+
+  const getReviewsFromFirestore = async () => {
+    try {
+      const approvedReviews = [];
+      const querySnapshot = await getDocs(collection(db, 'reviews'));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const reviews = data;
+
+        if (approvedReviews) {
+          approvedReviews.push(reviews);
+        } else {
+          console.log('Item is undefined');
+        }
+      });
+      setShowApprovedReviews(approvedReviews);
+      console.log(approvedReviews);
+    } catch (error) {
+      console.error('Error fetching data from Firestore:', error);
+    }
+  };
+
+  const closeApprovedReviews = () => {
+    setShowApprovedReviews([]);
+  };
+
   return (
     <>
       {/* <Background /> */}
@@ -234,12 +290,96 @@ const MovieDescription = () => {
               </div>
               <GoDotFill className="movieDots" />
               <div>
-                <Button className="userReviewsButon">User Reviews</Button>
+                <Button
+                  className="userReviewsButon"
+                  onClick={getReviewsFromFirestore}
+                >
+                  User Reviews
+                </Button>
               </div>
               <GoDotFill className="movieDots" />
               <div>
-                <Button className="userReviewsButon">Add Review</Button>
+                <Button
+                  className="userReviewsButon"
+                  onClick={() => {
+                    if (authenticated) {
+                      handleShowReview;
+                    } else {
+                      window.location.href = '/signin';
+                    }
+                  }}
+                >
+                  Add Review
+                </Button>
               </div>
+              <Modal
+                show={showReview}
+                onHide={handleCloseReview}
+                dialogClassName="modal-90w"
+                aria-labelledby="example-custom-modal-styling-title"
+                centered
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>Add Review</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <Form>
+                    <Form.Group
+                      className="mb-3"
+                      controlId="exampleForm.ControlInput1"
+                    >
+                      <Form.Label>Title</Form.Label>
+                      <Form.Control
+                        type="text"
+                        autoFocus
+                        onChange={(e) => setReviewTitle(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Label>Rating: </Form.Label>
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={(e) => setReviewRating(e.target.value)}
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </Form.Select>
+                    <Form.Group
+                      className="mb-3"
+                      controlId="exampleForm.ControlTextarea1"
+                    >
+                      <Form.Label>Review description</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={4}
+                        onChange={(e) => setReviewDescription(e.target.value)}
+                      />
+                    </Form.Group>
+                  </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="secondary" onClick={handleCloseReview}>
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      addReview(id);
+                      handleCloseReview();
+                    }}
+                    className="reviewSubmit"
+                  >
+                    Submit
+                  </Button>
+                </Modal.Footer>
+              </Modal>
               <GoDotFill className="movieDots" />
               <div>
                 {!isInWatchlist ? (
@@ -356,6 +496,50 @@ const MovieDescription = () => {
           </div>
         </div>
       </div>
+      {showApprovedReviews.length > 0 && (
+        <div className="reviewCardsDiv">
+          <h2>User Reviews:</h2>
+          {showApprovedReviews.filter(
+            (item) => item.status === 'approved' && item.movieId === id
+          ).length > 0 ? (
+            showApprovedReviews
+              .filter((item) => item.status === 'approved')
+              .map((item, index) => (
+                <Card className="reviewCard" key={index}>
+                  <Card.Header as="h5">
+                    {item.title}
+                    <span className="nameAndDate">
+                      {item.user}
+                      {' - '}
+                      {item.date &&
+                        new Date(
+                          item.date.seconds * 1000 +
+                            Math.floor(item.date.nanoseconds / 1000000)
+                        ).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                        })}
+                    </span>
+                  </Card.Header>
+                  <Card.Body>
+                    <Card.Title className="">
+                      <FaStar className="starrating" size={20} />
+                      {item.rating}/10
+                    </Card.Title>
+                    <Card.Text>{item.description}</Card.Text>
+                  </Card.Body>
+                </Card>
+              ))
+          ) : (
+            <div>No pending reviews</div>
+          )}
+          <Button className="genreButon" onClick={closeApprovedReviews}>
+            Close
+          </Button>
+        </div>
+      )}
+
       {/* ))} */}
       <div className="sliderTitle">
         <h2>Recommended for you</h2>

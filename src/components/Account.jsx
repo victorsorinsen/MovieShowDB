@@ -13,14 +13,18 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
+  deleteUser,
 } from 'firebase/auth';
 import { Form } from 'react-bootstrap';
 import { Alert } from 'react-bootstrap';
 import { getDoc, getDocs, collection, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { TfiTrash } from 'react-icons/tfi';
+import Accordion from 'react-bootstrap/Accordion';
+import { GoDotFill } from 'react-icons/go';
+import { FaStar } from 'react-icons/fa';
 
 const account = () => {
   const [showEmail, setShowEmail] = useState(false);
@@ -33,6 +37,7 @@ const account = () => {
   const authContext = UserAuth();
   const [showManageUsers, setManageUsers] = useState({});
   const [showUsers, setShowUsers] = useState([]);
+  const [showReviews, setShowReviews] = useState([]);
 
   const navigate = useNavigate();
 
@@ -265,6 +270,95 @@ const account = () => {
     }
   };
 
+  const removeUser = async (uid) => {
+    try {
+      // Delete user from Firebase Authentication using UID
+      await deleteUser(uid);
+
+      console.log('User deleted successfully');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
+  const getPendingReviewsfromFirestore = async () => {
+    try {
+      const pendingReviews = [];
+      const querySnapshot = await getDocs(collection(db, 'reviews'));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const reviews = data;
+
+        if (pendingReviews) {
+          pendingReviews.push(reviews);
+        } else {
+          console.log('Item is undefined');
+        }
+      });
+
+      setShowReviews(pendingReviews);
+      console.log(pendingReviews);
+    } catch (error) {
+      console.error('Error fetching data from Firestore:', error);
+    }
+  };
+
+  const closePendingReviews = () => {
+    setShowReviews([]);
+  };
+
+  const approveReview = async (review) => {
+    try {
+      const userReview = doc(
+        db,
+        'reviews',
+        `${review.movieId} - ${review.uid}`
+      );
+
+      await updateDoc(userReview, {
+        status: 'approved',
+      });
+
+      setShowReviews((prevReviews) => {
+        const filteredReviews = prevReviews.filter(
+          (prevReview) =>
+            prevReview.movieTitle !== review.movieTitle ||
+            prevReview.user !== review.user
+        );
+
+        console.log('Filtered Reviews:', filteredReviews);
+
+        return filteredReviews;
+      });
+
+      console.log('Review approved successfully!');
+    } catch (error) {
+      console.error('Error approving review:', error);
+    }
+  };
+
+  const declineReview = async (review) => {
+    try {
+      await deleteDoc(doc(db, 'reviews', `${review.movieId} - ${review.uid}`));
+
+      setShowReviews((prevReviews) => {
+        const filteredReviews = prevReviews.filter(
+          (prevReview) =>
+            prevReview.movieTitle !== review.movieTitle ||
+            prevReview.user !== review.user
+        );
+
+        console.log('Filtered Reviews:', filteredReviews);
+
+        return filteredReviews;
+      });
+
+      console.log('Review declined!');
+    } catch (error) {
+      console.error('Error declining review:', error);
+    }
+  };
+
   return (
     <>
       {showAlert && (
@@ -295,16 +389,28 @@ const account = () => {
           )}
 
           <CiEdit className="editProfileButton" onClick={buttonActions} />
-          {showManageUsers.admin === true ? (
-            <Button
-              className="buton signInButon"
-              onClick={getUserListfromFirestore}
-            >
-              Manage Users
-            </Button>
-          ) : (
-            ''
-          )}
+          <div className="manageButtons">
+            {showManageUsers.admin === true ? (
+              <Button
+                className="buton signInButon"
+                onClick={getUserListfromFirestore}
+              >
+                Manage Users
+              </Button>
+            ) : (
+              ''
+            )}
+            {showManageUsers.edit === true ? (
+              <Button
+                className="buton signInButon"
+                onClick={getPendingReviewsfromFirestore}
+              >
+                Manage Reviews
+              </Button>
+            ) : (
+              ''
+            )}
+          </div>
           <div className="accountButtons">
             <Button
               className="buton signInButon"
@@ -413,54 +519,59 @@ const account = () => {
       {showUsers.length !== 0 ? (
         <div className="manageContainer">
           <div className="usersContainer">
-            <ul className="userList">
-              <span>
-                <b>Users</b>
-              </span>
-              {showUsers.map((item, index) => (
-                <li key={`user_${index}`} className="userItem">
+            <ul className="headerRow">
+              <li className="userItem">
+                <span>
+                  <b>Email</b>
+                </span>
+              </li>
+              <li>
+                <div className="headerLabel">
+                  <span>Admin Rights</span>
+                </div>
+              </li>
+              <li>
+                <div className="headerLabel">
+                  <span>Review Rights</span>
+                </div>
+              </li>
+              <li className="userItem">
+                <span></span>
+              </li>
+            </ul>
+            {showUsers.map((item, index) => (
+              <ul className="userList" key={index}>
+                <li className="userItem">
                   <span>{item.email}</span>
                 </li>
-              ))}
-            </ul>
-            <ul className="adminUserList">
-              <span>
-                <b>Admin Rights</b>
-              </span>
-              {showUsers.map((item, index) => (
-                <div key={`admin_${index}`} className="checkboxContainer">
-                  <input
-                    type="checkbox"
-                    checked={item.admin}
-                    onChange={() => handleAdminChange(index)}
-                  />
-                </div>
-              ))}
-            </ul>
-            <ul className="reviewUserList">
-              <span>
-                <b>Review Rights</b>
-              </span>
-              {showUsers.map((item, index) => (
-                <div key={`edit_${index}`} className="checkboxContainer">
-                  <input
-                    type="checkbox"
-                    checked={item.edit}
-                    onChange={() => handleEditChange(index)}
-                  />
-                </div>
-              ))}
-            </ul>
-            <ul className="adminUserList">
-              <div className="emptyUl"></div>
-              {showUsers.map((item, index) => (
-                <li key={`user_${index}`} className="userItem">
-                  <button className="watchlistButton">
+                <li>
+                  <div className="checkboxContainer">
+                    <input
+                      type="checkbox"
+                      checked={item.admin}
+                      onChange={() => handleAdminChange(index)}
+                    />
+                  </div>
+                </li>
+                <li>
+                  <div className="checkboxContainer">
+                    <input
+                      type="checkbox"
+                      checked={item.edit}
+                      onChange={() => handleEditChange(index)}
+                    />
+                  </div>
+                </li>
+                <li className="userItem">
+                  <button
+                    className="watchlistButton"
+                    onClick={() => removeUser(item.uid)}
+                  >
                     <TfiTrash /> Delete user
                   </button>
                 </li>
-              ))}
-            </ul>
+              </ul>
+            ))}
           </div>
           <div className="userButtons">
             <Button className="genreButon" onClick={updateUsers}>
@@ -473,6 +584,68 @@ const account = () => {
         </div>
       ) : (
         ''
+      )}
+      {showReviews.length > 0 && (
+        <div className="manageContainer">
+          {showReviews.filter((item) => item.status === 'pending').length >
+          0 ? (
+            showReviews
+              .filter((item) => item.status === 'pending')
+              .map((item, index) => (
+                <Accordion key={index}>
+                  <Accordion.Item eventKey="0">
+                    <Accordion.Header>
+                      <div className="reviewTitle">
+                        <span>
+                          <b>{item.title}</b>
+                        </span>
+                        <span className="nameAndDate">
+                          {item.user}
+                          {' - '}
+                          {item.date &&
+                            new Date(
+                              item.date.seconds * 1000 +
+                                Math.floor(item.date.nanoseconds / 1000000)
+                            ).toLocaleDateString('en-GB', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                            })}
+                        </span>
+                      </div>
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      <p>
+                        <FaStar className="starrating" size={25} />
+                        {item.rating}
+                        {'/10'}
+                      </p>
+                      <p>{item.description}</p>
+                      <Button
+                        className="watchlistButtongreen"
+                        onClick={() => {
+                          approveReview(item);
+                        }}
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        className="watchlistButton"
+                        onClick={() => declineReview(item)}
+                      >
+                        Decline
+                      </Button>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+              ))
+          ) : (
+            <div>No pending reviews</div>
+          )}
+          <Button className="genreButon" onClick={closePendingReviews}>
+            Close
+          </Button>
+        </div>
       )}
     </>
   );

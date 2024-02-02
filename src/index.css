@@ -338,9 +338,6 @@ input.form-control:focus {
   /* transition: all 0.5s ease; */
 }
 
-.searchItemDiv .img {
-}
-
 .searchItemDiv:hover,
 .searchResultsAll:hover {
   cursor: pointer;
@@ -792,12 +789,51 @@ input.form-control:focus {
 .modal-content {
   width: 635px;
   border-radius: 1rem;
-  background-color: var(--color-four);
+  background-color: rgb(216, 216, 216);
+}
+
+.modal-content input:focus {
+  border: 2px solid var(--color-one);
 }
 
 .modal-header {
   border: none;
   padding-bottom: 0;
+}
+
+.modal-content select {
+  width: 70px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.modal-content option {
+  border-radius: 1rem;
+}
+
+.modal-content select:focus {
+  box-shadow: none;
+  border: 2px solid var(--color-one);
+}
+
+.modal-content textarea:focus {
+  box-shadow: none;
+  border: 2px solid var(--color-one);
+}
+
+.reviewSubmit {
+  background-color: var(--color-one);
+  border: none;
+}
+
+.reviewSubmit:hover {
+  background-color: var(--color-two);
+  border: none;
+}
+
+.reviewSubmit:active {
+  background-color: var(--color-three);
+  border: none;
 }
 
 .trailer:hover {
@@ -1103,7 +1139,7 @@ input.form-control:focus {
 }
 
 .editProfileButton {
-  margin-right: auto;
+  /* margin-right: auto; */
   height: 35px;
   width: auto;
   align-items: center;
@@ -1640,15 +1676,6 @@ p {
   text-decoration: none;
 }
 
-.creditImage {
-}
-
-/* .searchImage {
-  height: auto;
-  width: 50px;
-  border-radius: 0.5rem;
-} */
-
 .creditDetailsDiv {
   margin-left: 10px;
   flex-shrink: 1;
@@ -1726,7 +1753,7 @@ p {
 
 .usersContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background-color: var(--color-six);
 }
 
@@ -1734,28 +1761,16 @@ p {
   list-style: none;
   padding: 0;
   margin-left: 20px;
-}
-
-.userItem > li {
-  display: flex;
-}
-
-.userItem {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
   align-items: center;
-  margin-top: 10px;
-}
-
-.labelContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-right: 10px;
+  justify-content: center;
 }
 
 .checkboxContainer {
-  margin-top: 10px;
   display: flex;
+  align-items: center;
   justify-content: center;
 }
 
@@ -1779,16 +1794,18 @@ p {
   background-color: var(--color-one);
 }
 
-label {
-  margin-bottom: 5px;
+.headerRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin-left: 20px;
 }
 
-.adminUserList,
-.reviewUserList {
-  display: inline-block;
+.headerLabel {
   text-align: center;
-  padding: 0;
-  margin-left: 60px;
+  font-weight: bold;
 }
 
 .userButtons {
@@ -1796,7 +1813,7 @@ label {
   justify-content: flex-end;
 }
 
-.adminUserList .watchlistButton {
+.usersContainer .watchlistButton {
   margin-left: 10px;
   margin-right: 10px;
   background-color: var(--color-six);
@@ -1811,15 +1828,126 @@ label {
   height: 24px;
 }
 
-.adminUserList .watchlistButton:hover {
+.usersContainer .watchlistButton:hover {
   background-color: var(--color-one);
   color: var(--color-six);
 }
 
-.adminUserList .watchlistButton:active {
+.usersContainer .watchlistButton:active {
   background-color: var(--color-two);
 }
 
 .emptyUl {
   height: 21px;
+}
+
+.accordion-item button:focus {
+  box-shadow: none;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--color-six);
+  border-bottom: var(--bs-accordion-border-width) solid
+    var(--bs-accordion-border-color);
+}
+
+.accordion-item .watchlistButton {
+  margin: 10px 10px 0px 10px;
+  background-color: var(--color-six);
+  color: var(--color-one);
+  padding: 1px 5px 1px 5px;
+  border: 1.5px solid #000000;
+  border-radius: 0.5rem;
+  align-items: center;
+  display: flex;
+  padding-right: 5px;
+  font-size: medium;
+  height: 24px;
+  display: inline-block;
+  line-height: 1;
+}
+
+.accordion-item .watchlistButton:hover {
+  background-color: var(--color-one);
+  color: var(--color-six);
+}
+
+.accordion-item .watchlistButton:active {
+  background-color: var(--color-two);
+}
+
+.reviewTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.nameAndDate {
+  font-size: small;
+}
+
+.accordion-item .watchlistButtongreen {
+  margin: 10px 10px 0px 10px;
+  background-color: var(--color-six);
+  color: rgb(6, 209, 6);
+  padding: 1px 5px 1px 5px;
+  border: 1.5px solid #000000;
+  border-radius: 0.5rem;
+  align-items: center;
+  display: flex;
+  padding-right: 5px;
+  font-size: medium;
+  height: 24px;
+  display: inline-block;
+  line-height: 1;
+}
+
+.accordion-item .watchlistButtongreen:hover {
+  background-color: rgb(7, 177, 7);
+  color: var(--color-six);
+}
+
+.accordion-item .watchlistButtongreen:active {
+  background-color: rgb(2, 131, 2);
+  border-color: rgb(2, 131, 2);
+}
+
+.accordion-body p {
+  margin-bottom: 10px;
+}
+
+.manageButtons {
+  margin-right: auto;
+  display: flex;
+  margin-left: 20px;
+}
+
+.reviewCardsDiv {
+  margin-left: 200px;
+  margin-right: 200px;
+  background-color: var(--color-six);
+  padding: 10px;
+  box-shadow: 3px 3px 3px 3px var(--color-five);
+  border-radius: 1rem;
+}
+
+.reviewCard {
+  background-color: var(--color-six);
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  box-shadow: none;
+  width: auto;
+  margin-right: 0;
+  margin-top: 20px;
+}
+
+.reviewCard .card-title {
+  display: flex;
+  align-items: center;
+}
+
+.card-header span {
+  display: block;
+  margin-top: 5px;
 }
