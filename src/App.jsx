@@ -47,6 +47,7 @@ function App() {
             path="/SearchResults/All/:keyword"
             element={<SearchResults />}
           />
+          <Route path="/SearchResults/All/" element={<SearchResults />} />
           <Route
             path="/SearchResults/Movies/:keyword"
             element={<MovieSearchResults />}

@@ -3,7 +3,7 @@ import { FaStar } from 'react-icons/fa';
 import { GoDotFill } from 'react-icons/go';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { CiPlay1 } from 'react-icons/ci';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { Card } from 'react-bootstrap';
@@ -42,6 +42,7 @@ const MovieDescription = () => {
   const [reviewDescription, setReviewDescription] = useState('');
   const [reviewRating, setReviewRating] = useState('');
   const [showApprovedReviews, setShowApprovedReviews] = useState([]);
+  const reviewsDivRef = useRef(null);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -226,6 +227,10 @@ const MovieDescription = () => {
         }
       });
       setShowApprovedReviews(approvedReviews);
+      reviewsDivRef.current.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
       console.log(approvedReviews);
     } catch (error) {
       console.error('Error fetching data from Firestore:', error);
@@ -303,7 +308,7 @@ const MovieDescription = () => {
                   className="userReviewsButon"
                   onClick={() => {
                     if (authenticated) {
-                      handleShowReview;
+                      handleShowReview();
                     } else {
                       window.location.href = '/signin';
                     }
@@ -398,7 +403,7 @@ const MovieDescription = () => {
                     className="watchlistButton"
                     onClick={() => deleteItemFromWatchlist(docId)}
                   >
-                    <TfiTrash /> Remove
+                    <TfiTrash /> Remove from Watchlist
                   </button>
                 )}
               </div>
@@ -497,42 +502,48 @@ const MovieDescription = () => {
         </div>
       </div>
       {showApprovedReviews.length > 0 && (
-        <div className="reviewCardsDiv">
-          <h2>User Reviews:</h2>
+        <div className="reviewCardsDiv" ref={reviewsDivRef}>
           {showApprovedReviews.filter(
             (item) => item.status === 'approved' && item.movieId === id
           ).length > 0 ? (
-            showApprovedReviews
-              .filter((item) => item.status === 'approved')
-              .map((item, index) => (
-                <Card className="reviewCard" key={index}>
-                  <Card.Header as="h5">
-                    {item.title}
-                    <span className="nameAndDate">
-                      {item.user}
-                      {' - '}
-                      {item.date &&
-                        new Date(
-                          item.date.seconds * 1000 +
-                            Math.floor(item.date.nanoseconds / 1000000)
-                        ).toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: '2-digit',
-                          year: 'numeric',
-                        })}
-                    </span>
-                  </Card.Header>
-                  <Card.Body>
-                    <Card.Title className="">
-                      <FaStar className="starrating" size={20} />
-                      {item.rating}/10
-                    </Card.Title>
-                    <Card.Text>{item.description}</Card.Text>
-                  </Card.Body>
-                </Card>
-              ))
+            <>
+              <h3>User Reviews:</h3>
+              {showApprovedReviews
+                .filter(
+                  (item) => item.status === 'approved' && item.movieId === id
+                )
+                .map((item, index) => (
+                  <Card className="reviewCard" key={index}>
+                    <Card.Header as="h5">
+                      {item.title}
+                      <span className="nameAndDate">
+                        {item.user}
+                        {' - '}
+                        {item.date &&
+                          new Date(
+                            item.date.seconds * 1000 +
+                              Math.floor(item.date.nanoseconds / 1000000)
+                          ).toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                          })}
+                      </span>
+                    </Card.Header>
+                    <Card.Body>
+                      <Card.Title className="">
+                        <FaStar className="starrating" size={20} />
+                        {item.rating}/10
+                      </Card.Title>
+                      <Card.Text>{item.description}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                ))}
+            </>
           ) : (
-            <div>No pending reviews</div>
+            <h5 className="noReviews">
+              <b>No reviews submitted.</b>
+            </h5>
           )}
           <Button className="genreButon" onClick={closeApprovedReviews}>
             Close

@@ -372,7 +372,10 @@ const Watchlist = () => {
                     </div>
                     <div className="divWatchlistDescription">
                       <div>
-                        <Link className="cardMovieTitle" to={`/tv/${show.id}`}>
+                        <Link
+                          className="watchlistMovieTitle"
+                          to={`/tv/${show.id}`}
+                        >
                           <h1>{show.name}</h1>
                         </Link>
                       </div>

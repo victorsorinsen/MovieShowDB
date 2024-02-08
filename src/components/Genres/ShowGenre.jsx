@@ -152,7 +152,10 @@ const ShowGenre = () => {
             <div className="imageDiv">
               <Link to={`/tv/${item.id}`}>
                 {item.poster_path.endsWith(null) ? (
-                  <Card.Img variant="top" src="./src/assets/noimg.png" />
+                  <Card.Img
+                    variant="top"
+                    src="/src/assets/No-Image-Placeholder.png"
+                  />
                 ) : (
                   <Card.Img variant="top" src={item.poster_path} />
                 )}

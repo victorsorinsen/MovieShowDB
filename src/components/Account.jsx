@@ -562,14 +562,14 @@ const account = () => {
                     />
                   </div>
                 </li>
-                <li className="userItem">
+                {/* <li className="userItem">
                   <button
                     className="watchlistButton"
                     onClick={() => removeUser(item.uid)}
                   >
                     <TfiTrash /> Delete user
                   </button>
-                </li>
+                </li> */}
               </ul>
             ))}
           </div>

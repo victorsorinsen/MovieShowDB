@@ -462,9 +462,9 @@ input.form-control:focus {
   border-radius: 1rem;
 }
 
-.carousel-indicators {
+/* .carousel-indicators {
   background-color: var(--color-six);
-}
+} */
 
 [data-bs-theme='dark'].carousel .carousel-indicators [data-bs-target] {
   background-color: var(--color-one);
@@ -1495,7 +1495,7 @@ p {
 .persondescriptionPage {
   margin: 60px 200px 60px 200px;
   border: 1px solid var(--color-five);
-  padding: 10px 10px 10px 10px;
+  padding: 20px;
   background-color: var(--color-six);
   color: #000000;
   border-radius: 1rem;
@@ -1926,7 +1926,7 @@ p {
   margin-left: 200px;
   margin-right: 200px;
   background-color: var(--color-six);
-  padding: 10px;
+  padding: 20px;
   box-shadow: 3px 3px 3px 3px var(--color-five);
   border-radius: 1rem;
 }
@@ -1939,7 +1939,8 @@ p {
   box-shadow: none;
   width: auto;
   margin-right: 0;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .reviewCard .card-title {
@@ -1950,4 +1951,8 @@ p {
 .card-header span {
   display: block;
   margin-top: 5px;
+}
+
+.noReviews {
+  margin-bottom: 10px;
 }

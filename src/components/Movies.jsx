@@ -8,9 +8,8 @@ import MovieCarousel from './Movies/MovieCarousel';
 const Movies = () => {
   return (
     <>
-      <Background />
+      {/* <Background /> */}
       <MovieCarousel />
-      {/* <Slider /> */}
       <MostPopular />
       <TopRated />
       <Upcoming />
