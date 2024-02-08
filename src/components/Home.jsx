@@ -1,11 +1,10 @@
 import React from 'react';
-// import Background from './Background';
+// import Background from './background';
 import TrendingMovies from './Movies/TrendingMovies';
 import TrendingSeries from './Series/TrendingSeries';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { useEffect, useState } from 'react';
 import { UserAuth } from '../context/AuthContext';
-import TestButton from './TestButton';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { getAuth } from 'firebase/auth';
@@ -68,7 +67,7 @@ const Home = () => {
       <div className="homeInfoDiv">
         <div className="homeText">
           <h3>
-            <b>Welcome to My Watchlist.</b>
+            <b>Welcome to the MovieShowDB.</b>
           </h3>
           <div>
             <p>
@@ -94,7 +93,7 @@ const Home = () => {
           <Dropdown.Menu>
             <Dropdown.Item href="./Movies">Movies</Dropdown.Item>
             <Dropdown.Item href="./Series">TV Shows</Dropdown.Item>
-            <Dropdown.Item href={authenticated ? './Account' : './signin'}>
+            <Dropdown.Item href={authenticated ? './Watchlist' : './signin'}>
               Watchlist
             </Dropdown.Item>
           </Dropdown.Menu>
@@ -103,7 +102,6 @@ const Home = () => {
       {/* <Background /> */}
       <TrendingMovies />
       <TrendingSeries />
-      <TestButton />
     </>
   );
 };

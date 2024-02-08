@@ -51,7 +51,7 @@ function MovieCarousel() {
               >
                 <h5>{item.movieTitle}</h5>
               </Link>
-              <p className="carouseldescrip">{item.movieOverview}</p>
+              {/* <p className="carouseldescrip">{item.movieOverview}</p> */}
             </Carousel.Caption>
           </Carousel.Item>
         ))}

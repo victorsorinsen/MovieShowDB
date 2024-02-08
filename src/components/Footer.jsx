@@ -2,6 +2,13 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 
 const Footer = () => {
+  const recipientEmail = 'example@example.com';
+
+  const handleSendEmail = () => {
+    const mailtoLink = `mailto:${recipientEmail}`;
+    window.location.href = mailtoLink;
+  };
+
   return (
     <footer className="footerDiv">
       <div>
@@ -15,7 +22,9 @@ const Footer = () => {
           <a href="#top">Back to Top</a>
         </p> */}
       </div>
-      <Button className="buton signInButon">Contact us</Button>
+      <Button className="buton signInButon" onClick={handleSendEmail}>
+        Contact us
+      </Button>
     </footer>
   );
 };

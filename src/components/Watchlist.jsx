@@ -22,7 +22,6 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
 import { BsArrowDown } from 'react-icons/bs';
 import { BsArrowUp } from 'react-icons/bs';
-import Badge from 'react-bootstrap/Badge';
 
 const Watchlist = () => {
   const authContext = UserAuth();
@@ -159,76 +158,77 @@ const Watchlist = () => {
   return (
     <div className="watchlistContainer">
       <h2>Watchlist</h2>
-      <div className="watchlistFilters">
-        <Form.Control
-          type="text"
-          placeholder="Search..."
-          onChange={(e) => setSearchItem(e.target.value)}
-        />
-        <ButtonGroup>
-          <DropdownButton
-            id="dropdown-basic-button"
-            title={`Filter by: ${dropDownTitle}`}
-          >
-            <Dropdown.Item
-              onClick={() => clickButton('Rating')}
-              // value="vote_average"
+      {movieData.length !== 0 ? (
+        <div className="watchlistFilters">
+          <Form.Control
+            type="text"
+            placeholder="Search..."
+            onChange={(e) => setSearchItem(e.target.value)}
+          />
+          <ButtonGroup>
+            <DropdownButton
+              id="dropdown-basic-button"
+              title={`Filter by: ${dropDownTitle}`}
             >
-              Rating
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => clickButton('Release Date')}
-              value="release_date"
-            >
-              Release Date
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => clickButton('Popularity')}
-              value="popularity"
-            >
-              Popularity
-            </Dropdown.Item>
-          </DropdownButton>
-          <ButtonGroup className="mb-2 filterButton">
-            <ToggleButton
-              className="sortButtons one"
-              id="toggle-check"
-              type="checkbox"
-              checked={checked2}
-              value="1"
-              onChange={(e) =>
-                handleRadioChange(
-                  e,
-                  true,
-                  dropDownTitle === 'Rating' ? 'vote_average' : 'popularity'
-                )
-              }
-            >
-              <BsArrowDown size={18} />
-            </ToggleButton>
+              <Dropdown.Item
+                onClick={() => clickButton('Rating')}
+                // value="vote_average"
+              >
+                Rating
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => clickButton('Release Date')}
+                value="release_date"
+              >
+                Release Date
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => clickButton('Popularity')}
+                value="popularity"
+              >
+                Popularity
+              </Dropdown.Item>
+            </DropdownButton>
+            <ButtonGroup className="mb-2 filterButton">
+              <ToggleButton
+                className="sortButtons one"
+                id="toggle-check"
+                type="checkbox"
+                checked={checked2}
+                value="1"
+                onChange={(e) =>
+                  handleRadioChange(
+                    e,
+                    true,
+                    dropDownTitle === 'Rating' ? 'vote_average' : 'popularity'
+                  )
+                }
+              >
+                <BsArrowDown size={18} />
+              </ToggleButton>
+            </ButtonGroup>
+            <ButtonGroup className="mb-2">
+              <ToggleButton
+                className="sortButtons"
+                id="toggle-check2"
+                type="checkbox"
+                checked={checked1}
+                value="2"
+                onChange={(e) =>
+                  handleRadioChange(
+                    e,
+                    false,
+                    dropDownTitle === 'Rating' ? 'vote_average' : 'popularity'
+                  )
+                }
+              >
+                <BsArrowUp size={18} />
+              </ToggleButton>
+            </ButtonGroup>
           </ButtonGroup>
-          <ButtonGroup className="mb-2">
-            <ToggleButton
-              className="sortButtons"
-              id="toggle-check2"
-              type="checkbox"
-              checked={checked1}
-              value="2"
-              onChange={(e) =>
-                handleRadioChange(
-                  e,
-                  false,
-                  dropDownTitle === 'Rating' ? 'vote_average' : 'popularity'
-                )
-              }
-            >
-              <BsArrowUp size={18} />
-            </ToggleButton>
-          </ButtonGroup>
-        </ButtonGroup>
-      </div>
-      {movieData.length === 0 && (
-        <div className="noMoviesDiv">No movies added in watchlist.</div>
+        </div>
+      ) : (
+        <div className="noMoviesDiv">Your watchlist is empty.</div>
       )}
       {filteredArray.length > 0 && (
         <Tabs
@@ -268,7 +268,7 @@ const Watchlist = () => {
                     <div className="divWatchlistDescription">
                       <div>
                         <Link
-                          className="cardMovieTitle"
+                          className="watchlistMovieTitle"
                           to={`/movies/${movie.id}`}
                         >
                           <h1>{movie.title}</h1>
@@ -372,7 +372,10 @@ const Watchlist = () => {
                     </div>
                     <div className="divWatchlistDescription">
                       <div>
-                        <Link className="cardMovieTitle" to={`/tv/${show.id}`}>
+                        <Link
+                          className="watchlistMovieTitle"
+                          to={`/tv/${show.id}`}
+                        >
                           <h1>{show.name}</h1>
                         </Link>
                       </div>

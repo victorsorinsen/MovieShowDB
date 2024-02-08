@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import { FaCircleUser } from 'react-icons/fa6';
 import { useLocation } from 'react-router-dom';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 const Loggedin = () => {
   const authContext = UserAuth();
@@ -42,18 +43,28 @@ const Loggedin = () => {
   if (authenticated) {
     return (
       <div className="nav-item">
-        <Link className="accountIcon" to="/Account">
-          <FaCircleUser size={30} />
-          <p className="userAccountDisplay">
-            {currentPage === '/Account'
-              ? ''
-              : user?.displayName || user?.email || ''}
-          </p>
-        </Link>
+        <DropdownButton
+          id="dropdown-basic-button"
+          title={
+            <div>
+              <FaCircleUser size={30} />{' '}
+              <p>
+                {currentPage === '/Account'
+                  ? ''
+                  : user?.displayName || user?.email || ''}
+              </p>
+            </div>
+          }
+        >
+          <Dropdown.Item onClick={() => navigate('/Watchlist')}>
+            Watchlist
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => navigate('/Account')}>
+            Settings
+          </Dropdown.Item>
 
-        <Button className="buton signInButon" onClick={handleLogout}>
-          <b>Logout</b>
-        </Button>
+          <Dropdown.Item onClick={() => handleLogout()}>Logout</Dropdown.Item>
+        </DropdownButton>
       </div>
     );
   } else {

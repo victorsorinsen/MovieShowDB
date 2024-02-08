@@ -8,9 +8,8 @@ import ShowsCarousel from './Series/ShowsCarousel';
 const Series = () => {
   return (
     <>
-      <Background />
+      {/* <Background /> */}
       <ShowsCarousel />
-      {/* <Slider /> */}
       <AiringToday />
       <PopularSeries />
       <TopRatedSeries />

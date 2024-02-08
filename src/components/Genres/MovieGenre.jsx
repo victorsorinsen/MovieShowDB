@@ -96,7 +96,6 @@ const MovieGenre = () => {
   useEffect(() => {
     const fetchData = async () => {
       await getWatchlistData();
-      await getDataFromServer();
     };
 
     fetchData();
@@ -153,7 +152,10 @@ const MovieGenre = () => {
             <div className="imageDiv">
               <Link to={`/movies/${item.id}`}>
                 {item.poster_path.endsWith(null) ? (
-                  <Card.Img variant="top" src="./src/assets/noimg.png" />
+                  <Card.Img
+                    variant="top"
+                    src="/src/assets/No-Image-Placeholder.png"
+                  />
                 ) : (
                   <Card.Img variant="top" src={item.poster_path} />
                 )}
@@ -193,7 +195,7 @@ const MovieGenre = () => {
                     ) : (
                       <Button
                         className="inWatchlist"
-                        onClick={() => navigate('/Account')}
+                        onClick={() => navigate('/Watchlist')}
                       >
                         In Watchlist
                       </Button>

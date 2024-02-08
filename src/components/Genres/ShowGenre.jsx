@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Background from '../background';
+// import Background from '../background';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { addItemToWatchlist } from '../exportFunctions';
@@ -96,7 +96,6 @@ const ShowGenre = () => {
   useEffect(() => {
     const fetchData = async () => {
       await getWatchlistData();
-      await getDataFromServer();
     };
 
     fetchData();
@@ -145,7 +144,7 @@ const ShowGenre = () => {
 
   return (
     <div>
-      <Background />
+      {/* <Background /> */}
       <h2 className="genreTitle">Genre: {showGenreName}</h2>
       <div className="genrecardz" id="sliderMostPopular">
         {cardItems.map((item, index) => (
@@ -153,7 +152,10 @@ const ShowGenre = () => {
             <div className="imageDiv">
               <Link to={`/tv/${item.id}`}>
                 {item.poster_path.endsWith(null) ? (
-                  <Card.Img variant="top" src="./src/assets/noimg.png" />
+                  <Card.Img
+                    variant="top"
+                    src="/src/assets/No-Image-Placeholder.png"
+                  />
                 ) : (
                   <Card.Img variant="top" src={item.poster_path} />
                 )}
@@ -193,7 +195,7 @@ const ShowGenre = () => {
                     ) : (
                       <Button
                         className="inWatchlist"
-                        onClick={() => navigate('/Account')}
+                        onClick={() => navigate('/Watchlist')}
                       >
                         In Watchlist
                       </Button>
