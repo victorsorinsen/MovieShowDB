@@ -67,7 +67,7 @@ const Home = () => {
       <div className="homeInfoDiv">
         <div className="homeText">
           <h3>
-            <b>Welcome to My Watchlist.</b>
+            <b>Welcome to the MovieShowDB.</b>
           </h3>
           <div>
             <p>

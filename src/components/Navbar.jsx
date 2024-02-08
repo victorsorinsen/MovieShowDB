@@ -143,7 +143,7 @@ const Navbar = () => {
           <Menu />
           <BiSolidMoviePlay className="pageicon" size={40} onClick={HomePage} />
           <span className="pageicon" onClick={HomePage}>
-            <b>My Watchlist</b>
+            <b>MovieShowDB</b>
           </span>
         </div>
         <div className="searchbar">
