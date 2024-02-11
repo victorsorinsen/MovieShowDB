@@ -118,7 +118,6 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleURLChange = () => {
-      console.log('Current URL:', location.pathname);
       const inputElement = document.getElementById('inputScale');
       if (inputElement) {
         inputElement.value = '';

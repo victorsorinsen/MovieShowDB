@@ -105,7 +105,6 @@ const Watchlist = () => {
 
   const handleRadioChange = (e, descending, ratingType) => {
     if (!dropDownTitle) {
-      console.log(0);
       return;
     }
     const sortedArray = filteredArray.slice();
@@ -133,8 +132,6 @@ const Watchlist = () => {
     setChecked1(!descending && e.currentTarget.checked);
     setChecked2(descending && e.currentTarget.checked);
   };
-
-  console.log(movieData);
 
   const searchFilter = () => {
     const filteredItems = movieData.filter((item) => {

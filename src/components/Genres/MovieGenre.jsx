@@ -127,7 +127,6 @@ const MovieGenre = () => {
           }
         });
         setWatchlistItems(myData);
-        console.log('Watchlist Data:', myData);
       } else {
         console.log('User is not authenticated');
       }
@@ -138,7 +137,6 @@ const MovieGenre = () => {
 
   const isItemInWatchlist = (itemId) => {
     const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
-    console.log('Is Item in Watchlist:', isInWatchlist);
     return isInWatchlist;
   };
 

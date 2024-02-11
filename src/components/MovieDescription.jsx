@@ -164,7 +164,6 @@ const MovieDescription = () => {
           }
         });
         setWatchlistItems(myData);
-        console.log('Watchlist Data:', myData); // Log watchlist data
       } else {
         console.log('User is not authenticated');
       }
@@ -175,20 +174,15 @@ const MovieDescription = () => {
 
   const isItemInWatchlist = (itemId) => {
     const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
-    console.log('Is Item in Watchlist:', isInWatchlist);
     return isInWatchlist;
   };
-
-  console.log(movieDetails);
 
   const isItemInWatchlistthree = (title) => {
     const watchlistItem = watchlistItems.find((item) => item.title === title);
 
     if (watchlistItem) {
-      console.log('Item found in Watchlist:', watchlistItem);
       return { isInWatchlist: true, docId: watchlistItem.docId };
     } else {
-      console.log('Item not in Watchlist');
       return { isInWatchlist: false, docId: null };
     }
   };
@@ -231,7 +225,6 @@ const MovieDescription = () => {
         block: 'start',
         behavior: 'smooth',
       });
-      console.log(approvedReviews);
     } catch (error) {
       console.error('Error fetching data from Firestore:', error);
     }

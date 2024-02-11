@@ -86,8 +86,6 @@ const PersonDescription = () => {
     combined_credits,
   } = personDetails;
 
-  console.log(combined_credits);
-
   const getGenderLabel = (gender) => {
     switch (gender) {
       case 0:
@@ -105,9 +103,6 @@ const PersonDescription = () => {
 
   const genderLabel = getGenderLabel(gender);
 
-  console.log(personCreditsCast);
-  console.log(personCreditsCrew);
-
   const sortedCast = personCreditsCast.slice().sort((a, b) => {
     return b.movieDate.localeCompare(a.movieDate);
   });
@@ -121,7 +116,6 @@ const PersonDescription = () => {
   const crewTabs = [
     ...new Set(personCreditsCrew.map((item) => item.movieRole)),
   ];
-  console.log(crewTabs);
 
   const crewTabsData = {};
   sortedCrew.forEach((item) => {
@@ -130,8 +124,6 @@ const PersonDescription = () => {
     }
     crewTabsData[item.movieRole].push(item);
   });
-
-  console.log(crewTabsData);
 
   return (
     <>

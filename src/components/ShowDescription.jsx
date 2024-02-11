@@ -165,7 +165,6 @@ const ShowDescription = () => {
           }
         });
         setWatchlistItems(myData);
-        console.log('Watchlist Data:', myData);
       } else {
         console.log('User is not authenticated');
       }
@@ -176,7 +175,6 @@ const ShowDescription = () => {
 
   const isItemInWatchlist = (itemId) => {
     const isInWatchlist = watchlistItems.some((item) => item.id === itemId);
-    console.log('Is Item in Watchlist:', isInWatchlist);
     return isInWatchlist;
   };
 
@@ -184,21 +182,13 @@ const ShowDescription = () => {
     const watchlistItem = watchlistItems.find((item) => item.name === name);
 
     if (watchlistItem) {
-      console.log('Item found in Watchlist:', watchlistItem);
       return { isInWatchlist: true, docId: watchlistItem.docId };
     } else {
-      console.log('Item not in Watchlist');
       return { isInWatchlist: false, docId: null };
     }
   };
 
   const { isInWatchlist, docId } = isItemInWatchlistthree(movieDetails.name);
-
-  if (isInWatchlist) {
-    console.log('Movie is in watchlist. DocId:', docId);
-  } else {
-    console.log('Movie is not in watchlist.');
-  }
 
   const addReview = async (id) => {
     await setDoc(doc(db, 'reviews', `${id} - ${auth.currentUser.uid}`), {
@@ -232,7 +222,6 @@ const ShowDescription = () => {
         }
       });
       setShowApprovedReviews(approvedReviews);
-      console.log(approvedReviews);
     } catch (error) {
       console.error('Error fetching data from Firestore:', error);
     }

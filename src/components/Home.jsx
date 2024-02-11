@@ -29,8 +29,6 @@ const Home = () => {
     setDropdownOpen(isOpen);
   };
 
-  console.log(0);
-
   const getData = async () => {
     try {
       const myData = [];
@@ -55,8 +53,6 @@ const Home = () => {
       console.error('Error fetching data from Firestore:', error);
     }
   };
-
-  console.log(movieData);
 
   useEffect(() => {
     getData();

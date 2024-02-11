@@ -62,14 +62,11 @@ const account = () => {
     e.preventDefault();
     setError('');
     try {
-      console.log('user is:', auth.currentUser);
-      console.log('user is:', auth.currentUser.displayName);
       await updateProfile(auth.currentUser, {
         displayName: editProfileName,
         // photoURL: 'https://example.com/jane-q-user/profile.jpg',
       });
       setDisplayName(editProfileName);
-      console.log('Updated display name:', auth.currentUser.displayName);
     } catch (e) {
       setError(e.message);
       console.log(e.message);
@@ -102,7 +99,6 @@ const account = () => {
     e.preventDefault();
     setError('');
     try {
-      console.log('user is:', auth.currentUser);
       await reauthenticate(auth.currentUser.email, currentPassword);
       await updatePassword(auth.currentUser, newPassword);
       setShowPassword(false);
@@ -176,8 +172,6 @@ const account = () => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data());
-
         const userData = docSnap.data();
 
         setManageUsers(userData);
@@ -199,14 +193,12 @@ const account = () => {
 
         if (userData) {
           userList.push(userData);
-          console.log(userList);
         } else {
           console.log('Item is undefined');
         }
       });
 
       setShowUsers(userList);
-      console.log(userList);
     } catch (error) {
       console.error('Error fetching data from Firestore:', error);
     }
@@ -264,7 +256,6 @@ const account = () => {
 
       await batch.commit();
       setShowUsers([]);
-      console.log('Users updated successfully!');
     } catch (error) {
       console.error('Error updating users:', error);
     }
@@ -274,8 +265,6 @@ const account = () => {
     try {
       // Delete user from Firebase Authentication using UID
       await deleteUser(uid);
-
-      console.log('User deleted successfully');
     } catch (error) {
       console.error('Error deleting user:', error);
     }
@@ -297,7 +286,6 @@ const account = () => {
       });
 
       setShowReviews(pendingReviews);
-      console.log(pendingReviews);
     } catch (error) {
       console.error('Error fetching data from Firestore:', error);
     }
@@ -326,12 +314,8 @@ const account = () => {
             prevReview.user !== review.user
         );
 
-        console.log('Filtered Reviews:', filteredReviews);
-
         return filteredReviews;
       });
-
-      console.log('Review approved successfully!');
     } catch (error) {
       console.error('Error approving review:', error);
     }
@@ -348,12 +332,8 @@ const account = () => {
             prevReview.user !== review.user
         );
 
-        console.log('Filtered Reviews:', filteredReviews);
-
         return filteredReviews;
       });
-
-      console.log('Review declined!');
     } catch (error) {
       console.error('Error declining review:', error);
     }

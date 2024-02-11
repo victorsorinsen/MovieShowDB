@@ -19,7 +19,6 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   setError('');
   try {
-    console.log('user is:', auth.currentUser);
     //   await reauthenticate(auth.currentUser.email, currentPassword);
     await updateProfile(auth.currentUser, {
       displayName: 'Jane Q. User',
